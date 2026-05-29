@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PAIS — BuonsensoClinic</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8JEGDN6N7Y"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-8JEGDN6N7Y');
+
+  // Track key events
+  function trackEvent(name, params){
+    if(typeof gtag !== 'undefined') gtag('event', name, params || {});
+  }
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+:root{
+  --bg:#f5f2ee;--surface:#fff;--surface2:#faf8f5;--border:#e2ddd8;
+  --text:#2a2520;--text-light:#7a6e66;--accent:#4a7a9b;--accent-soft:#e6f0f6;
+  --accent2:#7a5f4e;--danger:#c0574a;--success:#3d7a5e;--success-soft:#e8f5ee;
+  --warm:#d4943a;--crypto:#e8870f;--revolut:#191C33;
+  --changed:#e8a84a;--changed-soft:#fff8e8;
+  --shadow:0 2px 14px rgba(42,37,32,0.09);--radius:13px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;}
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 8px rgba(42,37,32,0.07);gap:10px;flex-wrap:wrap;}
+.logo-wrap{display:flex;flex-direction:column;}
+.logo-main{font-family:'Lora',serif;font-size:1rem;color:var(--accent);font-weight:600;letter-spacing:-0.01em;line-height:1.2;}
+.logo-sub{font-size:0.7rem;color:var(--text-light);font-weight:400;letter-spacing:0.03em;}
+.lang-toggle{display:flex;gap:3px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:3px;}
+.lang-btn{border:none;background:none;padding:4px 9px;border-radius:5px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;color:var(--text-light);transition:all 0.2s;}
+.lang-btn.active{background:var(--accent);color:white;}
+.progress-wrap{background:var(--surface);padding:10px 20px;border-bottom:1px solid var(--border);}
+.progress-info{display:flex;justify-content:space-between;font-size:0.76rem;color:var(--text-light);margin-bottom:4px;}
+.progress-bar{height:4px;background:var(--border);border-radius:99px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--accent);border-radius:99px;transition:width 0.5s ease;}
+main{max-width:700px;margin:0 auto;padding:24px 16px 80px;}
+.screen{display:none;animation:fadeIn 0.35s ease;}
+.screen.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── WELCOME ── */
+.welcome-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:32px 28px;text-align:center;box-shadow:var(--shadow);}
+.clinic-badge{display:inline-flex;align-items:center;gap:7px;background:var(--accent-soft);border:1px solid #b8d4e6;border-radius:99px;padding:5px 14px;font-size:0.78rem;color:var(--accent);font-weight:500;margin-bottom:14px;}
+.welcome-card h1{font-family:'Lora',serif;font-size:1.45rem;color:var(--text);margin-bottom:7px;line-height:1.3;}
+.welcome-card h2{font-family:'Lora',serif;font-size:0.95rem;color:var(--accent2);font-weight:400;font-style:italic;margin-bottom:13px;}
+.welcome-card p{color:var(--text-light);margin-bottom:7px;font-size:0.89rem;}
+.notice{background:var(--accent-soft);border:1px solid #b8d4e6;border-radius:8px;padding:11px 15px;font-size:0.82rem;color:#2d5f7a;margin:13px 0;text-align:left;line-height:1.6;}
+.author-notice{background:#faf5ff;border:1px solid #d4b8e8;border-radius:8px;padding:11px 15px;font-size:0.82rem;color:#5a3a7a;margin:10px 0;text-align:left;line-height:1.6;}
+.donation-notice{background:var(--warm-soft,#fff8e8);border:1px solid #f0d9a0;border-radius:8px;padding:10px 15px;font-size:0.81rem;color:#7a5010;margin:10px 0;text-align:left;line-height:1.6;}
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px;}
+.mode-card{background:var(--surface2);border:2px solid var(--border);border-radius:11px;padding:20px 16px;cursor:pointer;transition:all 0.2s;text-align:center;}
+.mode-card:hover{border-color:var(--accent);background:var(--accent-soft);transform:translateY(-2px);box-shadow:var(--shadow);}
+.mode-card .mode-icon{font-size:2rem;margin-bottom:8px;}
+.mode-card h3{font-family:'Lora',serif;font-size:1rem;color:var(--text);margin-bottom:5px;}
+.mode-card p{font-size:0.8rem;color:var(--text-light);line-height:1.45;}
+@media(max-width:480px){.mode-grid{grid-template-columns:1fr;}}
+
+/* ── FOLLOWUP SCREEN ── */
+.followup-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);}
+.followup-card h2{font-family:'Lora',serif;font-size:1.15rem;color:var(--text);margin-bottom:8px;}
+.followup-card p{font-size:0.87rem;color:var(--text-light);margin-bottom:16px;line-height:1.6;}
+.code-input-wrap{display:flex;gap:10px;margin-bottom:14px;}
+.code-input{font-family:monospace;font-size:1.1rem;letter-spacing:0.1em;text-transform:uppercase;text-align:center;padding:12px 16px;border:2px solid var(--border);border-radius:9px;background:var(--surface2);width:100%;outline:none;transition:border-color 0.2s;}
+.code-input:focus{border-color:var(--accent);background:white;}
+.code-error{color:var(--danger);font-size:0.83rem;margin-top:6px;display:none;}
+.or-divider{display:flex;align-items:center;gap:12px;margin:16px 0;font-size:0.8rem;color:var(--text-light);}
+.or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.file-import-area{border:2px dashed var(--border);border-radius:10px;padding:18px;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--surface2);}
+.file-import-area:hover{border-color:var(--accent);background:var(--accent-soft);}
+
+/* ── PATIENT CODE DISPLAY ── */
+.code-display{background:linear-gradient(135deg,#f0f9ff,#e6f0f6);border:2px solid var(--accent);border-radius:11px;padding:22px;text-align:center;margin-bottom:14px;}
+.code-display p{font-size:0.83rem;color:var(--text-light);margin-bottom:8px;}
+.code-value{font-family:monospace;font-size:1.8rem;font-weight:700;color:var(--accent);letter-spacing:0.18em;background:white;border:2px solid var(--accent);border-radius:8px;padding:12px 24px;display:inline-block;margin-bottom:10px;cursor:pointer;transition:all 0.2s;}
+.code-value:hover{background:var(--accent-soft);}
+.code-display small{font-size:0.76rem;color:var(--text-light);line-height:1.5;display:block;}
+.code-copy-row{display:flex;gap:8px;justify-content:center;margin-top:10px;}
+.code-copied{color:var(--success);font-size:0.82rem;font-weight:500;display:none;margin-top:4px;}
+
+/* ── FOLLOWUP BADGE ── */
+.followup-badge{display:inline-flex;align-items:center;gap:6px;background:var(--changed-soft);border:1px solid var(--changed);border-radius:99px;padding:4px 12px;font-size:0.76rem;color:#7a5010;font-weight:500;margin-bottom:10px;}
+.changed-indicator{background:var(--changed-soft);border:1px solid var(--changed);border-radius:6px;padding:3px 8px;font-size:0.72rem;color:#7a5010;font-weight:500;margin-left:6px;white-space:nowrap;}
+.prev-value{font-size:0.78rem;color:var(--text-light);margin-top:4px;padding:4px 8px;background:var(--surface2);border-left:3px solid var(--border);border-radius:0 4px 4px 0;font-style:italic;}
+
+/* ── Q CARD ── */
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:23px 23px 19px;box-shadow:var(--shadow);margin-bottom:13px;}
+.q-section{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.09em;color:var(--accent);font-weight:500;margin-bottom:6px;}
+.q-text{font-family:'Lora',serif;font-size:1.1rem;color:var(--text);margin-bottom:5px;line-height:1.4;}
+.q-hint{font-size:0.8rem;color:var(--text-light);margin-bottom:14px;font-style:italic;}
+textarea,input[type="text"],input[type="email"]{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:0.9rem;color:var(--text);background:var(--surface2);resize:vertical;transition:border-color 0.2s;outline:none;}
+textarea:focus,input:focus{border-color:var(--accent);background:white;}
+textarea{min-height:90px;}
+.voice-wrap{display:flex;align-items:center;gap:10px;margin-top:9px;}
+.voice-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;border:1.5px solid var(--accent);border-radius:8px;background:none;color:var(--accent);font-family:'DM Sans',sans-serif;font-size:0.8rem;cursor:pointer;transition:all 0.2s;font-weight:500;}
+.voice-btn:hover{background:var(--accent-soft);}
+.voice-btn.recording{background:#ffeeed;border-color:var(--danger);color:var(--danger);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
+.voice-status{font-size:0.76rem;color:var(--text-light);font-style:italic;}
+.options-grid{display:flex;flex-direction:column;gap:6px;}
+.option-label{display:flex;align-items:flex-start;gap:11px;padding:10px 13px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;background:var(--surface2);transition:all 0.15s;font-size:0.89rem;line-height:1.45;}
+.option-label:hover{border-color:var(--accent);background:var(--accent-soft);}
+.option-dot{width:17px;height:17px;border:2px solid var(--border);flex-shrink:0;background:white;display:flex;align-items:center;justify-content:center;margin-top:2px;border-radius:4px;transition:all 0.15s;}
+.option-label.selected{border-color:var(--accent);background:var(--accent-soft);}
+.option-label.selected .option-dot{background:var(--accent);border-color:var(--accent);}
+.option-label.selected .option-dot::after{content:'✓';color:white;font-size:0.67rem;font-weight:700;}
+.adl-note{font-size:0.78rem;color:var(--text-light);margin-bottom:8px;font-style:italic;}
+input[type="range"]{width:100%;accent-color:var(--accent);cursor:pointer;}
+.slider-value{text-align:center;font-size:1.3rem;font-weight:500;color:var(--accent);margin-top:3px;font-family:'Lora',serif;}
+.slider-labels{display:flex;justify-content:space-between;font-size:0.73rem;color:var(--text-light);margin-top:3px;}
+.bell-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:9px 13px;margin-top:9px;}
+.bell-card strong{color:var(--accent);font-size:0.71rem;display:block;margin-bottom:7px;text-transform:uppercase;letter-spacing:0.06em;}
+.bell-row{display:flex;gap:9px;border-bottom:1px solid var(--border);cursor:pointer;border-radius:6px;padding:7px 5px;align-items:flex-start;transition:background 0.1s;}
+.bell-row:last-child{border-bottom:none;}
+.bell-row:hover{background:var(--accent-soft);}
+.bell-score{font-weight:700;color:var(--accent2);min-width:27px;font-size:0.87rem;}
+.bell-desc{color:var(--text);font-size:0.81rem;line-height:1.44;}
+.bell-row.bell-selected{background:var(--accent-soft);border:1.5px solid var(--accent);}
+.file-upload-area{border:2px dashed var(--border);border-radius:10px;padding:17px;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--surface2);}
+.file-upload-area:hover,.file-upload-area.dragover{border-color:var(--accent);background:var(--accent-soft);}
+.file-list{margin-top:8px;display:flex;flex-direction:column;gap:5px;}
+.file-item{display:flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:0.8rem;}
+.file-item .rm{margin-left:auto;cursor:pointer;color:var(--text-light);border:none;background:none;}
+
+/* ── BUTTONS ── */
+.btn{padding:11px 20px;border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:500;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;gap:7px;}
+.btn-primary{background:var(--accent);color:white;}
+.btn-primary:hover{background:#3d6b87;transform:translateY(-1px);box-shadow:0 4px 12px rgba(74,122,155,0.3);}
+.btn-secondary{background:var(--surface);color:var(--text);border:1.5px solid var(--border);}
+.btn-secondary:hover{background:var(--surface2);}
+.btn-pdf{background:#c0392b;color:white;}
+.btn-pdf:hover{background:#a93226;}
+.btn-warm{background:var(--warm);color:white;}
+.btn-revolut{background:var(--revolut);color:white;}
+.btn-crypto{background:var(--crypto);color:white;}
+.btn-success-col{background:var(--success);color:white;}
+.btn-substack{background:#FF6719;color:white;}
+.btn-substack:hover{background:#e05510;}
+.btn-export{background:#6c5ce7;color:white;}
+.btn-export:hover{background:#5a4bd1;}
+.nav-buttons{display:flex;justify-content:space-between;gap:11px;margin-top:15px;}
+.nav-buttons .btn{flex:1;justify-content:center;}
+
+/* ── SUMMARY ── */
+.summary-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:23px;box-shadow:var(--shadow);margin-bottom:13px;}
+.summary-card h3{font-family:'Lora',serif;font-size:0.96rem;color:var(--accent2);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.summary-text-area{background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;padding:14px;font-family:'DM Sans',sans-serif;font-size:0.85rem;line-height:1.75;color:var(--text);width:100%;min-height:260px;white-space:pre-wrap;resize:vertical;outline:none;}
+.ai-badge{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#f0e8ff,#e8f1ff);border:1px solid #c5b8e8;border-radius:20px;padding:3px 10px;font-size:0.72rem;color:#6854a4;font-weight:500;margin-bottom:10px;}
+.copy-success{color:var(--success);font-size:0.82rem;font-weight:500;display:none;}
+.pdf-generating{color:var(--accent);font-size:0.82rem;display:none;align-items:center;gap:6px;}
+
+/* ── SUBSTACK ── */
+.substack-card{background:linear-gradient(135deg,#fff8f3,#fff3ea);border:1.5px solid #ffd4b0;border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);margin-bottom:13px;text-align:center;}
+.substack-card h3{font-family:'Lora',serif;font-size:1.05rem;color:#8a3a10;margin-bottom:8px;}
+.substack-card p{font-size:0.87rem;color:#7a4020;margin-bottom:16px;line-height:1.65;}
+
+/* ── FEEDBACK ── */
+.feedback-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);margin-bottom:13px;}
+.feedback-card h3{font-family:'Lora',serif;font-size:0.96rem;color:var(--accent2);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.stars-row{display:flex;gap:8px;justify-content:center;margin-bottom:13px;}
+.star-btn{font-size:1.5rem;background:none;border:none;cursor:pointer;transition:transform 0.15s;padding:2px;}
+.star-btn:hover,.star-btn.active{transform:scale(1.2);}
+.star-btn.dimmed{opacity:0.3;}
+.feedback-sent{background:var(--success-soft);border:1px solid #b8e0c8;border-radius:8px;padding:12px;text-align:center;font-size:0.86rem;color:var(--success);display:none;margin-top:10px;}
+
+/* ── CONSENT ── */
+.consent-card{background:linear-gradient(135deg,#f0f7ff,#e8f1ff);border:1.5px solid #b8d4e6;border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);margin-bottom:13px;}
+.consent-card h3{font-family:'Lora',serif;font-size:0.96rem;color:var(--accent);margin-bottom:9px;}
+.consent-card p{font-size:0.82rem;color:var(--text-light);margin-bottom:13px;line-height:1.6;}
+.consent-toggle{display:flex;align-items:center;gap:12px;padding:11px 13px;background:white;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;transition:all 0.15s;margin-bottom:7px;}
+.consent-toggle:hover{border-color:var(--accent);background:var(--accent-soft);}
+.toggle-switch{width:40px;height:22px;background:var(--border);border-radius:99px;position:relative;flex-shrink:0;transition:background 0.2s;}
+.toggle-switch.on{background:var(--accent);}
+.toggle-knob{width:16px;height:16px;background:white;border-radius:50%;position:absolute;top:3px;left:3px;transition:left 0.2s;box-shadow:0 1px 4px rgba(0,0,0,0.15);}
+.toggle-switch.on .toggle-knob{left:21px;}
+.toggle-label{font-size:0.86rem;color:var(--text);line-height:1.4;}
+
+/* ── CONTACTS ── */
+.contacts-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);margin-bottom:13px;}
+.contacts-card h3{font-family:'Lora',serif;font-size:0.96rem;color:var(--accent2);margin-bottom:9px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.contacts-card p{font-size:0.82rem;color:var(--text-light);margin-bottom:13px;line-height:1.6;}
+.contact-field{margin-bottom:9px;}
+.contact-field label{display:block;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);font-weight:500;margin-bottom:4px;}
+.contact-sent{background:var(--success-soft);border:1px solid #b8e0c8;border-radius:8px;padding:12px;text-align:center;font-size:0.85rem;color:var(--success);display:none;margin-top:10px;}
+
+/* ── DONATION ── */
+.donation-card{background:linear-gradient(135deg,#fffbf0,#fff8e8);border:1.5px solid #f0d9a0;border-radius:var(--radius);padding:24px 22px;box-shadow:var(--shadow);margin-bottom:13px;text-align:center;}
+.donation-card h3{font-family:'Lora',serif;font-size:1.05rem;color:#8a6020;margin-bottom:7px;}
+.donation-intro{font-size:0.86rem;color:#7a6030;margin-bottom:6px;line-height:1.65;}
+.donation-cta{font-size:0.86rem;color:#6a4a10;font-weight:500;margin-bottom:15px;line-height:1.55;background:#fff3d6;border-radius:8px;padding:10px 14px;border:1px solid #f0d9a0;}
+.donation-amounts{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-bottom:15px;}
+.donation-pill{padding:7px 15px;border:1.5px solid #d4a840;border-radius:99px;background:white;color:#8a6020;font-weight:500;font-size:0.87rem;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;}
+.donation-pill:hover,.donation-pill.selected{background:var(--warm);color:white;border-color:var(--warm);}
+.payment-methods{display:flex;flex-direction:column;gap:8px;}
+.pay-method-btn{width:100%;justify-content:center;padding:12px;}
+.pay-divider{display:flex;align-items:center;gap:10px;margin:2px 0;}
+.pay-divider::before,.pay-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.pay-divider span{font-size:0.73rem;color:var(--text-light);}
+.donation-note{font-size:0.75rem;color:#9a8050;margin-top:11px;line-height:1.5;}
+.crypto-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:200;align-items:center;justify-content:center;padding:20px;}
+.crypto-modal.open{display:flex;}
+.crypto-box{background:var(--surface);border-radius:var(--radius);padding:26px;max-width:420px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,0.2);}
+.crypto-box h4{font-family:'Lora',serif;font-size:1rem;color:var(--text);margin-bottom:14px;}
+.crypto-entry{margin-bottom:12px;}
+.crypto-entry label{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);font-weight:500;display:block;margin-bottom:4px;}
+.crypto-addr{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:8px 11px;font-family:monospace;font-size:0.75rem;word-break:break-all;color:var(--text);display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.copy-addr-btn{border:none;background:none;cursor:pointer;color:var(--accent);font-size:0.78rem;font-weight:500;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+
+@media(max-width:520px){.q-card,.summary-card,.donation-card,.feedback-card,.consent-card,.contacts-card,.substack-card,.followup-card{padding:15px;}.welcome-card{padding:20px 14px;}.btn{padding:10px 11px;font-size:0.83rem;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-wrap">
+    <div class="logo-main">Post Acute Infectious Sequelae</div>
+    <div class="logo-sub">BuonsensoClinic · Patient Assessment</div>
+  </div>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('it')" id="btn-it">🇮🇹</button>
+    <button class="lang-btn" onclick="setLang('en')" id="btn-en">🇬🇧</button>
+    <button class="lang-btn" onclick="setLang('fr')" id="btn-fr">🇫🇷</button>
+    <button class="lang-btn" onclick="setLang('es')" id="btn-es">🇪🇸</button>
+  </div>
+</header>
+
+<div class="progress-wrap" id="progress-wrap" style="display:none">
+  <div class="progress-info"><span id="progress-label"></span><span id="progress-pct">0%</span></div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+</div>
+
+<main>
+
+<!-- ══ WELCOME ══ -->
+<div class="screen active" id="screen-welcome">
+  <div class="welcome-card">
+    <div class="clinic-badge">🏥 BuonsensoClinic</div>
+    <h1 id="welcome-title"></h1>
+    <h2 id="welcome-subtitle"></h2>
+    <p id="welcome-sub"></p>
+    <div class="notice" id="welcome-notice"></div>
+    <div class="author-notice" id="author-notice"></div>
+    <div class="donation-notice" id="donation-notice"></div>
+    <p style="font-size:0.8rem;color:var(--text-light);margin-bottom:18px" id="welcome-time"></p>
+    <div class="mode-grid">
+      <div class="mode-card" onclick="startNew()">
+        <div class="mode-icon">📋</div>
+        <h3 id="mode-new-title"></h3>
+        <p id="mode-new-desc"></p>
+      </div>
+      <div class="mode-card" onclick="showFollowup()">
+        <div class="mode-icon">🔄</div>
+        <h3 id="mode-fu-title"></h3>
+        <p id="mode-fu-desc"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FOLLOW-UP ENTRY ══ -->
+<div class="screen" id="screen-followup">
+  <div class="followup-card">
+    <h2 id="fu-title"></h2>
+    <p id="fu-desc"></p>
+    <label style="font-size:0.77rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);font-weight:500;display:block;margin-bottom:6px" id="fu-code-label"></label>
+    <div class="code-input-wrap">
+      <input class="code-input" type="text" id="fu-code-input" maxlength="8" placeholder="es. A3F7-X2K9" oninput="this.value=this.value.toUpperCase()">
+      <button class="btn btn-primary" onclick="loadByCode()" id="fu-load-btn"></button>
+    </div>
+    <div class="code-error" id="fu-code-error"></div>
+    <div class="or-divider"><span id="fu-or-text"></span></div>
+    <div class="file-import-area" onclick="document.getElementById('import-input').click()">
+      <div style="font-size:1.3rem;margin-bottom:4px">📂</div>
+      <div style="font-size:0.85rem;color:var(--text-light)" id="fu-import-label"></div>
+      <input type="file" id="import-input" accept=".json" style="display:none" onchange="loadFromFile(this)">
+    </div>
+    <button class="btn btn-secondary" style="width:100%;justify-content:center;margin-top:14px" onclick="showScreen('screen-welcome')">← <span id="fu-back-text"></span></button>
+  </div>
+</div>
+
+<!-- ══ QUESTIONS ══ -->
+<div class="screen" id="screen-questions">
+  <div id="followup-banner" style="display:none;margin-bottom:12px">
+    <div class="followup-badge">🔄 <span id="fu-banner-text"></span></div>
+  </div>
+  <div class="q-card">
+    <div class="q-section" id="q-section"></div>
+    <div class="q-text" id="q-text"></div>
+    <div class="q-hint" id="q-hint"></div>
+    <div id="q-input-area"></div>
+    <div id="prev-value-area"></div>
+    <div class="voice-wrap" id="voice-wrap">
+      <button class="voice-btn" id="voice-btn" onclick="toggleVoice()">🎤 <span id="voice-btn-text"></span></button>
+      <span class="voice-status" id="voice-status"></span>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn btn-secondary" onclick="goBack()">← <span id="back-text"></span></button>
+    <button class="btn btn-primary" onclick="goNext()"><span id="next-text"></span> →</button>
+  </div>
+</div>
+
+<!-- ══ SUMMARY ══ -->
+<div class="screen" id="screen-summary">
+
+  <!-- Codice paziente -->
+  <div class="code-display" id="code-display-box">
+    <p id="code-display-label"></p>
+    <div class="code-value" id="patient-code-display" onclick="copyPatientCode()" title="Clicca per copiare"></div>
+    <div class="code-copy-row">
+      <button class="btn btn-primary" onclick="copyPatientCode()" style="padding:8px 18px;font-size:0.83rem" id="copy-code-btn"><span id="copy-code-text">📋 Copia il codice</span></button>
+      <button class="btn btn-secondary" onclick="exportSession()" style="padding:8px 18px;font-size:0.83rem"><span id="export-btn-text2">💾 Salva file .json</span></button>
+    </div>
+    <div class="code-copied" id="code-copied-msg"></div>
+    <small id="code-display-hint"></small>
+  </div>
+
+  <div class="summary-card">
+    <div class="ai-badge">✨ <span id="ai-badge-text"></span></div>
+    <div id="fu-summary-badge" style="display:none;margin-bottom:8px">
+      <div class="followup-badge">🔄 <span id="fu-summary-label"></span></div>
+    </div>
+    <h3 id="summary-heading"></h3>
+    <textarea class="summary-text-area" id="summary-output"></textarea>
+  </div>
+
+  <div class="summary-card">
+    <h3 id="actions-heading"></h3>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <button class="btn btn-pdf" onclick="downloadPDF()" style="justify-content:center" id="pdf-btn">📄 <span id="pdf-btn-text"></span></button>
+      <div class="pdf-generating" id="pdf-generating">⏳ <span id="pdf-gen-text"></span></div>
+      <button class="btn btn-export" onclick="exportSession()" style="justify-content:center">💾 <span id="export-btn-text"></span></button>
+      <button class="btn btn-primary" onclick="copySummary()" style="justify-content:center">📋 <span id="copy-btn-text"></span></button>
+      <span class="copy-success" id="copy-success"></span>
+      <button class="btn btn-secondary" onclick="emailSummary()" style="justify-content:center">✉️ <span id="email-btn-text"></span></button>
+      <button class="btn btn-secondary" onclick="restart()" style="justify-content:center">🔄 <span id="restart-btn-text"></span></button>
+    </div>
+  </div>
+
+  <!-- SUBSTACK -->
+  <div class="substack-card">
+    <div style="font-size:1.4rem;margin-bottom:7px">📰</div>
+    <h3 id="substack-title"></h3>
+    <p id="substack-text"></p>
+    <button class="btn btn-substack" onclick="window.open('https://danilobuonsenso.substack.com','_blank')" style="width:100%;justify-content:center">📰 <span id="substack-btn-text"></span></button>
+  </div>
+
+  <!-- FEEDBACK -->
+  <div class="feedback-card">
+    <h3 id="feedback-title"></h3>
+    <p style="font-size:0.82rem;color:var(--text-light);margin-bottom:12px" id="feedback-sub"></p>
+    <div class="stars-row">
+      <button class="star-btn" onclick="rateStar(1)" id="s1">⭐</button>
+      <button class="star-btn" onclick="rateStar(2)" id="s2">⭐</button>
+      <button class="star-btn" onclick="rateStar(3)" id="s3">⭐</button>
+      <button class="star-btn" onclick="rateStar(4)" id="s4">⭐</button>
+      <button class="star-btn" onclick="rateStar(5)" id="s5">⭐</button>
+    </div>
+    <div id="feedback-form" style="display:none">
+      <textarea id="feedback-text" style="min-height:60px;margin-bottom:9px"></textarea>
+      <button class="btn btn-secondary" onclick="sendFeedback()" style="width:100%;justify-content:center" id="feedback-send-btn"></button>
+    </div>
+    <div class="feedback-sent" id="feedback-sent"></div>
+  </div>
+
+  <!-- CONSENSO -->
+  <div class="consent-card">
+    <h3 id="consent-title"></h3>
+    <p id="consent-desc"></p>
+    <div class="consent-toggle" onclick="toggleConsent('data')">
+      <div class="toggle-switch" id="sw-data"><div class="toggle-knob"></div></div>
+      <span class="toggle-label" id="consent-data-label"></span>
+    </div>
+    <div class="consent-toggle" onclick="toggleConsent('contact')">
+      <div class="toggle-switch" id="sw-contact"><div class="toggle-knob"></div></div>
+      <span class="toggle-label" id="consent-contact-label"></span>
+    </div>
+    <p style="font-size:0.74rem;color:var(--text-light);margin-top:9px;line-height:1.5" id="consent-note"></p>
+  </div>
+
+  <!-- CONTATTI -->
+  <div class="contacts-card">
+    <h3 id="contacts-title"></h3>
+    <p id="contacts-desc"></p>
+    <div class="contact-field"><label id="contacts-name-label"></label><input type="text" id="contact-name" autocomplete="name"></div>
+    <div class="contact-field"><label id="contacts-email-label"></label><input type="email" id="contact-email" autocomplete="email"></div>
+    <div class="contact-field"><label id="contacts-phone-label"></label><input type="text" id="contact-phone" autocomplete="tel"></div>
+    <div class="contact-field"><label id="contacts-note-label"></label><textarea id="contact-note" style="min-height:55px"></textarea></div>
+    <button class="btn btn-success-col" onclick="saveContacts()" style="width:100%;justify-content:center;margin-top:3px" id="contacts-save-btn"></button>
+    <div class="contact-sent" id="contact-sent"></div>
+  </div>
+
+  <!-- DONAZIONE -->
+  <div class="donation-card">
+    <div style="font-size:1.3rem;margin-bottom:7px">☕</div>
+    <h3 id="donation-title"></h3>
+    <p class="donation-intro" id="donation-intro"></p>
+    <div class="donation-cta" id="donation-cta"></div>
+    <div class="donation-amounts">
+      <button class="donation-pill" onclick="donate(2,'d2')" id="d2">2€</button>
+      <button class="donation-pill" onclick="donate(5,'d5')" id="d5">5€</button>
+      <button class="donation-pill" onclick="donate(10,'d10')" id="d10">10€</button>
+      <button class="donation-pill" onclick="donate(0,'dcustom')" id="dcustom"><span id="other-amount-text"></span></button>
+    </div>
+    <div id="donation-action" style="display:none">
+      <div class="payment-methods">
+        <button class="btn btn-revolut pay-method-btn" onclick="openRevolut()">💳 <span id="revolut-btn-text"></span></button>
+        <div class="pay-divider"><span id="or-text"></span></div>
+        <button class="btn btn-warm pay-method-btn" onclick="openPaypal()">🅿️ <span id="paypal-btn-text"></span></button>
+        <div class="pay-divider"><span id="or-text2"></span></div>
+        <button class="btn btn-crypto pay-method-btn" onclick="openCrypto()">₿ <span id="crypto-btn-text"></span></button>
+      </div>
+    </div>
+    <p class="donation-note" id="donation-note"></p>
+  </div>
+
+  <!-- CRYPTO MODAL -->
+  <div class="crypto-modal" id="crypto-modal" onclick="closeCryptoIfBg(event)">
+    <div class="crypto-box">
+      <h4 id="crypto-modal-title"></h4>
+      <div class="crypto-entry">
+        <label>USDT (TRC-20 / Tron)</label>
+        <div class="crypto-addr">
+          <span id="addr-usdt">TPzxeen2PHBhgLYfdLms7zVnfFqa4Zyv3Ei</span>
+          <button class="copy-addr-btn" onclick="copyAddr('addr-usdt','copy-usdt')" id="copy-usdt">Copia</button>
+        </div>
+      </div>
+      <p style="font-size:0.76rem;color:var(--text-light);margin-top:11px;line-height:1.5" id="crypto-note-text"></p>
+      <button class="btn btn-secondary" style="width:100%;justify-content:center;margin-top:12px" onclick="document.getElementById('crypto-modal').classList.remove('open')"><span id="close-modal-text"></span></button>
+    </div>
+  </div>
+
+
+</div>
+</main>
+
+<script>
+// ╔══════════════════════════════════════════════════╗
+// ║  PAGAMENTI                                       ║
+// ╚══════════════════════════════════════════════════╝
+const PAY={revolut:'https://revolut.me/danilo8rht',paypal:'https://paypal.me/DaniloBuonsenso',usdt:'TPzxeen2PHBhgLYfdLms7zVnfFqa4Zyv3Ei'};
+
+// ╔══════════════════════════════════════════════════╗
+// ║  STATE                                           ║
+// ╚══════════════════════════════════════════════════╝
+let lang='it', currentStep=-1, answers={}, prevAnswers=null, uploadedFiles=[];
+let recognition=null, isRecording=false, selectedDonation=0;
+let consentData=false, consentContact=false, starRating=0;
+let isFollowup=false, patientCode='', visitNumber=1, visitDate='';
+let generatedSummary='';
+
+// ╔══════════════════════════════════════════════════╗
+// ║  TRADUZIONI                                      ║
+// ╚══════════════════════════════════════════════════╝
+const T={
+it:{
+  welcome_title:'Post Acute Infectious Sequelae',welcome_subtitle:'BuonsensoClinic — Valutazione Clinica',
+  welcome_sub:'Strumento di valutazione strutturata per ME/CFS, Long Covid, POTS e sequele post-infettive.',
+  welcome_notice:'ℹ️ Rispondi con calma, al tuo ritmo. Puoi scrivere o usare la voce. Puoi fermarti e riprendere.',
+  welcome_time:'⏱ Durata stimata: 15–25 minuti',
+  author_notice:'✍️ Strumento ideato e sviluppato dal Dr. Danilo Buonsenso (BuonsensoClinic). Tutti i diritti riservati. Il sunto clinico generato è strutturato sulla base della sua esperienza clinica nelle sequele post-infettive acute.',
+  donation_notice:'☕ Questo programma è completamente gratuito per tutti i pazienti. Al termine, se lo desideri, potrai lasciare una donazione volontaria per supportarne lo sviluppo continuo — non è in alcun modo obbligatoria.',
+  mode_new_title:'Prima visita',mode_new_desc:'Compila il questionario per la prima volta e ricevi il tuo codice paziente.',
+  mode_fu_title:'Follow-up',mode_fu_desc:'Hai già un codice paziente? Aggiorna la tua valutazione precedente.',
+  fu_title:'Follow-up — inserisci il tuo codice',
+  fu_desc:'Inserisci il codice che hai ricevuto alla prima visita oppure carica il file JSON salvato. I tuoi dati precedenti verranno precompilati — modifica solo ciò che è cambiato.',
+  fu_code_label:'Codice paziente (8 caratteri)',fu_load_btn:'Carica',fu_or_text:'oppure importa il file salvato',
+  fu_import_label:'Clicca per importare il file .json della sessione precedente',
+  fu_back_text:'Torna indietro',fu_code_error:'Codice non trovato. Prova a importare il file JSON.',
+  fu_banner_text:'Follow-up — modifica solo i campi cambiati',
+  fu_summary_label:'Rapporto di follow-up con variazioni rispetto alla visita precedente',
+  start_btn:'Inizia la valutazione',back:'Indietro',next:'Avanti',finish:'Genera il sunto PDF',
+  voice_use:'Usa voce',voice_stop:'Ferma',voice_listening:'🔴 In ascolto...',voice_err:'Voce non disponibile',
+  upload_section:'Documenti allegati',upload_title:'Hai referti o documenti?',upload_hint:'Opzionale — PDF, immagini, testo',upload_cta:'Clicca o trascina i file qui',
+  ai_badge:'Sunto generato con AI',summary_heading:'Sunto clinico — pronto per il medico',
+  actions_heading:'Scarica e condividi',
+  code_display_label:'Il tuo codice paziente BuonsensoClinic',
+  code_display_hint:'Conserva questo codice — ti servirà per i follow-up futuri.\nPuoi anche scaricare il file .json come backup.',
+  pdf_btn:'Scarica PDF',pdf_generating:'Generazione PDF in corso...',
+  export_btn:'Salva sessione (.json)',
+  copy_code_btn:'📋 Copia il codice',
+  code_copied_msg:'✓ Codice copiato!',
+  donation_cta_fu:'🙏 Hai completato il tuo follow-up. Se lo strumento ti è utile nel tempo, considera una tip per supportarne lo sviluppo continuo. Non è obbligatoria.',
+  donation_title_fu:'Grazie per aver completato il follow-up',
+  copy_btn:'Copia testo',copied:'✓ Copiato!',email_btn:'Invia via email',restart_btn:'Ricomincia',
+  bell_label:'Scala di Bell — clicca il livello che descrive la tua condizione attuale',
+  adl_note:'Seleziona tutte le attività che riesci a svolgere (anche parzialmente)',
+  prev_label:'Risposta precedente',changed_label:'Modificato',
+  substack_title:'Condividi la tua storia con il Dr. Buonsenso',
+  substack_text:'Visita il blog "Buonsenso & the Kids" su Substack per condividere la tua storia e discutere con un esperto di sequele post-infettive.',
+  substack_btn:'Vai al blog — Buonsenso & the Kids',
+  feedback_title:'💬 Consigli di miglioramento',feedback_sub:'Come valuti questo strumento?',
+  feedback_placeholder:'Cosa miglioreresti? Manca qualcosa?',feedback_send:'Invia feedback',
+  feedback_thanks:'Grazie! Il tuo feedback è prezioso. 🙏',
+  consent_title:'🔬 Consenso per la ricerca',
+  consent_desc:'I tuoi dati, in forma completamente anonima, potrebbero contribuire alla ricerca sulle PAIS. Puoi revocare il consenso in qualsiasi momento.',
+  consent_data_label:'Acconsento all\'utilizzo dei miei dati anonimi per ricerca scientifica',
+  consent_contact_label:'Acconsento ad essere contattato/a per futuri studi di ricerca',
+  consent_note:'Dati trattati nel rispetto del GDPR. Nessuna informazione identificativa condivisa con terzi.',
+  contacts_title:'📬 Essere ricontattato/a',contacts_desc:'Lascia i tuoi contatti se vuoi essere ricontattato/a per un consulto. È facoltativo.',
+  contacts_name:'Nome (facoltativo)',contacts_email:'Email',contacts_phone:'Telefono / WhatsApp (facoltativo)',contacts_note:'Messaggio opzionale',
+  contacts_save:'Aggiungi contatti al PDF',contacts_saved:'✓ Contatti aggiunti.',
+  donation_title:'Questo strumento è gratuito per tutti',
+  donation_intro:'Sviluppato per supportare i pazienti con sequele post-infettive.',
+  donation_cta:'🙏 Se ti è stato utile, considera una tip per supportare il mio lavoro e lo sviluppo futuro. Non è obbligatoria, ma è davvero apprezzata.',
+  other_amount:'Altro',revolut_btn:'Revolut',paypal_btn:'PayPal',crypto_btn:'Crypto (USDT)',or_text:'oppure',
+  donation_note:'Ogni contributo aiuta a mantenere questo servizio gratuito per tutti. Grazie di cuore.',
+  crypto_modal_title:'💎 Donazione USDT (Tron TRC-20)',
+  crypto_note:'⚠️ Inviare solo USDT sulla rete Tron (TRC-20). Verificare la rete prima di procedere.',
+  copy_addr:'Copia',close_modal:'Chiudi',
+  progress:(s,tot)=>`Sezione ${s} di ${tot}`,
+  nd:'N/D',none:'nessuno',nd_sel:'nessuna selezionata',describe:'Descrivi liberamente…',
+  summary_subject:'Valutazione PAIS — BuonsensoClinic',
+  pdf_disclaimer:'Questo documento è un riassunto della storia clinica elaborato sulla base delle informazioni fornite dal paziente e strutturato secondo l\'esperienza clinica del Dr. Danilo Buonsenso (BuonsensoClinic). Non sostituisce una visita medica specialistica.',
+  pdf_contact_cta:'Per discutere questa storia clinica con un esperto: danilobuonsenso.substack.com',
+  local_no_add:'(nessuna aggiunta)',
+  visit_label:'Visita',followup_label:'Follow-up',
+  fu_changes_header:'VARIAZIONI RISPETTO ALLA VISITA PRECEDENTE',
+  fu_no_changes:'Nessuna modifica rispetto alla visita precedente.',
+  fu_changed:'Modificato',fu_was:'Era',fu_now:'Ora',
+},
+en:{
+  welcome_title:'Post Acute Infectious Sequelae',welcome_subtitle:'BuonsensoClinic — Clinical Assessment',
+  welcome_sub:'Structured assessment tool for ME/CFS, Long Covid, POTS and post-infectious sequelae.',
+  welcome_notice:'ℹ️ Answer at your own pace. You can type or use your voice. You can stop and return anytime.',
+  welcome_time:'⏱ Estimated time: 15–25 minutes',
+  author_notice:'✍️ Tool conceived and developed by Dr. Danilo Buonsenso (BuonsensoClinic). All rights reserved. The generated clinical summary is structured on the basis of his clinical experience in post-acute infectious sequelae.',
+  donation_notice:'☕ This programme is completely free for all patients. At the end, if you wish, you can leave a voluntary donation to support its continued development — it is in no way required.',
+  mode_new_title:'First visit',mode_new_desc:'Complete the questionnaire for the first time and receive your patient code.',
+  mode_fu_title:'Follow-up',mode_fu_desc:'Already have a patient code? Update your previous assessment.',
+  fu_title:'Follow-up — enter your code',
+  fu_desc:'Enter the code you received at your first visit, or import the saved JSON file. Your previous data will be pre-filled — only change what has changed.',
+  fu_code_label:'Patient code (8 characters)',fu_load_btn:'Load',fu_or_text:'or import the saved file',
+  fu_import_label:'Click to import the .json file from your previous session',
+  fu_back_text:'Go back',fu_code_error:'Code not found. Try importing the JSON file.',
+  fu_banner_text:'Follow-up — only update fields that have changed',
+  fu_summary_label:'Follow-up report with changes from previous visit',
+  start_btn:'Start the assessment',back:'Back',next:'Next',finish:'Generate PDF summary',
+  voice_use:'Use voice',voice_stop:'Stop',voice_listening:'🔴 Listening...',voice_err:'Voice not available',
+  upload_section:'Attached documents',upload_title:'Do you have any test results or documents?',upload_hint:'Optional — PDF, images, text',upload_cta:'Click or drag files here',
+  ai_badge:'AI-generated summary',summary_heading:'Clinical summary — ready for your doctor',
+  actions_heading:'Download and share',
+  code_display_label:'Your BuonsensoClinic patient code',
+  code_display_hint:'Save this code — you will need it for future follow-ups.\nYou can also download the .json file as a backup.',
+  pdf_btn:'Download PDF',pdf_generating:'Generating PDF...',
+  export_btn:'Save session (.json)',
+  copy_code_btn:'📋 Copy the code',
+  code_copied_msg:'✓ Code copied!',
+  donation_cta_fu:'🙏 You have completed your follow-up. If this tool is useful over time, please consider a tip to support its continued development. It is not required.',
+  donation_title_fu:'Thank you for completing your follow-up',
+  copy_btn:'Copy text',copied:'✓ Copied!',email_btn:'Send by email',restart_btn:'Start over',
+  bell_label:'Bell Scale — click the level that best describes your current condition',
+  adl_note:'Select all activities you can do (even partially or with effort)',
+  prev_label:'Previous answer',changed_label:'Changed',
+  substack_title:'Share your story with Dr. Buonsenso',
+  substack_text:'Visit the "Buonsenso & the Kids" blog on Substack to share your story and discuss with an expert in post-infectious sequelae.',
+  substack_btn:'Go to the blog — Buonsenso & the Kids',
+  feedback_title:'💬 Improvement suggestions',feedback_sub:'How do you rate this tool?',
+  feedback_placeholder:'What would you improve? Is something missing?',feedback_send:'Send feedback',
+  feedback_thanks:'Thank you! Your feedback is valuable. 🙏',
+  consent_title:'🔬 Research consent',
+  consent_desc:'Your data, in completely anonymous form, could contribute to PAIS research. You can withdraw consent at any time.',
+  consent_data_label:'I consent to the anonymous use of my data for scientific research',
+  consent_contact_label:'I consent to being contacted to participate in future research studies',
+  consent_note:'Data processed in compliance with GDPR. No identifying information shared with third parties.',
+  contacts_title:'📬 Be contacted',contacts_desc:'Leave your details if you would like to be contacted for a consultation. Optional.',
+  contacts_name:'Name (optional)',contacts_email:'Email',contacts_phone:'Phone / WhatsApp (optional)',contacts_note:'Optional message',
+  contacts_save:'Add contacts to PDF',contacts_saved:'✓ Contacts added.',
+  donation_title:'This tool is free for everyone',
+  donation_intro:'Developed to support patients with post-infectious sequelae.',
+  donation_cta:'🙏 If it was helpful, please consider a tip to support my work. Not required, but truly appreciated.',
+  other_amount:'Other',revolut_btn:'Revolut',paypal_btn:'PayPal',crypto_btn:'Crypto (USDT)',or_text:'or',
+  donation_note:'Every contribution helps keep this service free for everyone. Thank you so much.',
+  crypto_modal_title:'💎 USDT Donation (Tron TRC-20)',
+  crypto_note:'⚠️ Send only USDT on the Tron network (TRC-20). Verify the network before sending.',
+  copy_addr:'Copy',close_modal:'Close',
+  distrib_note:'⚠️ Privacy: no data is transmitted to external servers. The PDF is generated in the patient\'s browser.',
+  progress:(s,tot)=>`Section ${s} of ${tot}`,
+  nd:'N/A',none:'none',nd_sel:'none selected',describe:'Describe freely…',
+  summary_subject:'PAIS Assessment — BuonsensoClinic',
+  pdf_disclaimer:'This document is a summary of the clinical history elaborated on the basis of the information provided by the patient and structured according to the clinical experience of Dr. Danilo Buonsenso (BuonsensoClinic). It does not replace a specialist medical visit.',
+  pdf_contact_cta:'To discuss this clinical history with an expert: danilobuonsenso.substack.com',
+  local_no_add:'(no addition)',
+  visit_label:'Visit',followup_label:'Follow-up',
+  fu_changes_header:'CHANGES FROM PREVIOUS VISIT',
+  fu_no_changes:'No changes from the previous visit.',
+  fu_changed:'Changed',fu_was:'Was',fu_now:'Now',
+},
+fr:{
+  welcome_title:'Séquelles post-infectieuses aiguës',welcome_subtitle:'BuonsensoClinic — Évaluation clinique',
+  welcome_sub:'Outil d\'évaluation structurée pour EM/SFC, Covid long, POTS et séquelles post-infectieuses.',
+  welcome_notice:'ℹ️ Répondez à votre rythme. Vous pouvez écrire ou utiliser votre voix. Vous pouvez vous arrêter et reprendre.',
+  welcome_time:'⏱ Durée estimée : 15–25 minutes',
+  author_notice:'✍️ Outil conçu et développé par le Dr Danilo Buonsenso (BuonsensoClinic). Tous droits réservés. Le résumé clinique généré est structuré sur la base de son expérience clinique dans les séquelles post-infectieuses aiguës.',
+  donation_notice:'☕ Ce programme est entièrement gratuit pour tous les patients. À la fin, si vous le souhaitez, vous pouvez laisser un don volontaire pour soutenir son développement — ce n\'est en aucun cas obligatoire.',
+  mode_new_title:'Première visite',mode_new_desc:'Remplissez le questionnaire pour la première fois et recevez votre code patient.',
+  mode_fu_title:'Suivi',mode_fu_desc:'Vous avez déjà un code patient ? Mettez à jour votre évaluation précédente.',
+  fu_title:'Suivi — entrez votre code',
+  fu_desc:'Entrez le code reçu lors de votre première visite ou importez le fichier JSON sauvegardé. Vos données précédentes seront pré-remplies.',
+  fu_code_label:'Code patient (8 caractères)',fu_load_btn:'Charger',fu_or_text:'ou importer le fichier sauvegardé',
+  fu_import_label:'Cliquez pour importer le fichier .json de votre session précédente',
+  fu_back_text:'Retour',fu_code_error:'Code non trouvé. Essayez d\'importer le fichier JSON.',
+  fu_banner_text:'Suivi — modifiez uniquement les champs qui ont changé',
+  fu_summary_label:'Rapport de suivi avec les changements par rapport à la visite précédente',
+  start_btn:'Commencer l\'évaluation',back:'Retour',next:'Suivant',finish:'Générer le résumé PDF',
+  voice_use:'Utiliser la voix',voice_stop:'Arrêter',voice_listening:'🔴 Écoute...',voice_err:'Voix non disponible',
+  upload_section:'Documents joints',upload_title:'Avez-vous des résultats ou documents ?',upload_hint:'Optionnel — PDF, images, texte',upload_cta:'Cliquez ou déposez vos fichiers ici',
+  ai_badge:'Résumé généré par IA',summary_heading:'Résumé clinique — prêt pour votre médecin',
+  actions_heading:'Télécharger et partager',
+  code_display_label:'Votre code patient BuonsensoClinic',
+  code_display_hint:'Conservez ce code — vous en aurez besoin pour les suivis futurs.\nVous pouvez aussi télécharger le fichier .json comme sauvegarde.',
+  pdf_btn:'Télécharger PDF',pdf_generating:'Génération du PDF...',
+  export_btn:'Sauvegarder la session (.json)',
+  copy_code_btn:'📋 Copier le code',
+  code_copied_msg:'✓ Code copié !',
+  donation_cta_fu:'🙏 Vous avez complété votre suivi. Si cet outil vous est utile dans le temps, envisagez un pourboire pour soutenir son développement. Ce n\'est pas obligatoire.',
+  donation_title_fu:'Merci d\'avoir complété votre suivi',
+  copy_btn:'Copier le texte',copied:'✓ Copié !',email_btn:'Envoyer par email',restart_btn:'Recommencer',
+  bell_label:'Échelle de Bell — cliquez le niveau qui décrit le mieux votre état actuel',
+  adl_note:'Sélectionnez toutes les activités que vous pouvez faire (même partiellement)',
+  prev_label:'Réponse précédente',changed_label:'Modifié',
+  substack_title:'Partagez votre histoire avec le Dr Buonsenso',
+  substack_text:'Visitez le blog "Buonsenso & the Kids" sur Substack pour partager votre histoire et discuter avec un expert.',
+  substack_btn:'Aller au blog — Buonsenso & the Kids',
+  feedback_title:'💬 Suggestions d\'amélioration',feedback_sub:'Comment évaluez-vous cet outil ?',
+  feedback_placeholder:'Que changeriez-vous ? Manque-t-il quelque chose ?',feedback_send:'Envoyer le retour',
+  feedback_thanks:'Merci ! Vos retours sont précieux. 🙏',
+  consent_title:'🔬 Consentement pour la recherche',
+  consent_desc:'Vos données, sous forme anonyme, pourraient contribuer à la recherche sur les PAIS.',
+  consent_data_label:'Je consens à l\'utilisation anonyme de mes données pour la recherche',
+  consent_contact_label:'Je consens à être contacté(e) pour de futures études de recherche',
+  consent_note:'Données traitées conformément au RGPD.',
+  contacts_title:'📬 Être recontacté(e)',contacts_desc:'Laissez vos coordonnées si vous souhaitez être recontacté(e). Facultatif.',
+  contacts_name:'Nom (facultatif)',contacts_email:'Email',contacts_phone:'Téléphone / WhatsApp (facultatif)',contacts_note:'Message optionnel',
+  contacts_save:'Ajouter les contacts au PDF',contacts_saved:'✓ Contacts ajoutés.',
+  donation_title:'Cet outil est gratuit pour tous',
+  donation_intro:'Développé pour soutenir les patients avec des séquelles post-infectieuses.',
+  donation_cta:'🙏 S\'il vous a été utile, envisagez un petit pourboire. Ce n\'est pas obligatoire, mais vraiment apprécié.',
+  other_amount:'Autre',revolut_btn:'Revolut',paypal_btn:'PayPal',crypto_btn:'Crypto (USDT)',or_text:'ou',
+  donation_note:'Chaque contribution aide à maintenir ce service gratuit. Merci.',
+  crypto_modal_title:'💎 Don USDT (Tron TRC-20)',crypto_note:'⚠️ Envoyer uniquement USDT sur Tron (TRC-20).',
+  copy_addr:'Copier',close_modal:'Fermer',
+  progress:(s,tot)=>`Section ${s} sur ${tot}`,
+  nd:'N/R',none:'aucun',nd_sel:'aucune sélectionnée',describe:'Décrivez librement…',
+  summary_subject:'Évaluation PAIS — BuonsensoClinic',
+  pdf_disclaimer:'Ce document est un résumé de l\'histoire clinique élaboré selon l\'expérience clinique du Dr Danilo Buonsenso (BuonsensoClinic). Il ne remplace pas une consultation médicale spécialisée.',
+  pdf_contact_cta:'Pour discuter avec un expert : danilobuonsenso.substack.com',
+  local_no_add:'(aucun ajout)',
+  visit_label:'Visite',followup_label:'Suivi',
+  fu_changes_header:'CHANGEMENTS PAR RAPPORT À LA VISITE PRÉCÉDENTE',
+  fu_no_changes:'Aucun changement par rapport à la visite précédente.',
+  fu_changed:'Modifié',fu_was:'Était',fu_now:'Maintenant',
+},
+es:{
+  welcome_title:'Secuelas post-infecciosas agudas',welcome_subtitle:'BuonsensoClinic — Evaluación clínica',
+  welcome_sub:'Herramienta de evaluación estructurada para EM/SFC, Covid persistente, POTS y secuelas post-infecciosas.',
+  welcome_notice:'ℹ️ Responda a su ritmo. Puede escribir o usar la voz. Puede detenerse y continuar cuando quiera.',
+  welcome_time:'⏱ Duración estimada: 15–25 minutos',
+  author_notice:'✍️ Herramienta concebida y desarrollada por el Dr. Danilo Buonsenso (BuonsensoClinic). Todos los derechos reservados. El resumen clínico generado está estructurado según su experiencia clínica en secuelas post-infecciosas agudas.',
+  donation_notice:'☕ Este programa es completamente gratuito para todos los pacientes. Al final, si lo desea, puede dejar una donación voluntaria para apoyar su desarrollo continuo — no es en absoluto obligatoria.',
+  mode_new_title:'Primera visita',mode_new_desc:'Complete el cuestionario por primera vez y reciba su código de paciente.',
+  mode_fu_title:'Seguimiento',mode_fu_desc:'¿Ya tiene un código de paciente? Actualice su evaluación anterior.',
+  fu_title:'Seguimiento — introduzca su código',
+  fu_desc:'Introduzca el código recibido en su primera visita o importe el archivo JSON guardado. Sus datos anteriores se rellenarán automáticamente.',
+  fu_code_label:'Código de paciente (8 caracteres)',fu_load_btn:'Cargar',fu_or_text:'o importar el archivo guardado',
+  fu_import_label:'Haga clic para importar el archivo .json de su sesión anterior',
+  fu_back_text:'Volver',fu_code_error:'Código no encontrado. Intente importar el archivo JSON.',
+  fu_banner_text:'Seguimiento — solo actualice los campos que han cambiado',
+  fu_summary_label:'Informe de seguimiento con cambios respecto a la visita anterior',
+  start_btn:'Iniciar la evaluación',back:'Atrás',next:'Siguiente',finish:'Generar resumen PDF',
+  voice_use:'Usar voz',voice_stop:'Detener',voice_listening:'🔴 Escuchando...',voice_err:'Voz no disponible',
+  upload_section:'Documentos adjuntos',upload_title:'¿Tiene resultados o documentos médicos?',upload_hint:'Opcional — PDF, imágenes, texto',upload_cta:'Haga clic o arrastre archivos aquí',
+  ai_badge:'Resumen generado por IA',summary_heading:'Resumen clínico — listo para su médico',
+  actions_heading:'Descargar y compartir',
+  code_display_label:'Su código de paciente BuonsensoClinic',
+  code_display_hint:'Guarde este código — lo necesitará para futuros seguimientos.\nTambién puede descargar el archivo .json como copia de seguridad.',
+  pdf_btn:'Descargar PDF',pdf_generating:'Generando PDF...',
+  export_btn:'Guardar sesión (.json)',
+  copy_code_btn:'📋 Copiar el código',
+  code_copied_msg:'✓ ¡Código copiado!',
+  donation_cta_fu:'🙏 Ha completado su seguimiento. Si esta herramienta le es útil con el tiempo, considere una propina para apoyar su desarrollo continuo. No es obligatoria.',
+  donation_title_fu:'Gracias por completar su seguimiento',
+  copy_btn:'Copiar texto',copied:'✓ ¡Copiado!',email_btn:'Enviar por email',restart_btn:'Empezar de nuevo',
+  bell_label:'Escala de Bell — haga clic en el nivel que mejor describe su estado actual',
+  adl_note:'Seleccione todas las actividades que puede realizar (aunque sea parcialmente)',
+  prev_label:'Respuesta anterior',changed_label:'Modificado',
+  substack_title:'Comparte tu historia con el Dr. Buonsenso',
+  substack_text:'Visita el blog "Buonsenso & the Kids" en Substack para compartir tu historia y discutir con un experto.',
+  substack_btn:'Ir al blog — Buonsenso & the Kids',
+  feedback_title:'💬 Sugerencias de mejora',feedback_sub:'¿Cómo valora esta herramienta?',
+  feedback_placeholder:'¿Qué mejoraría? ¿Falta algo?',feedback_send:'Enviar opinión',
+  feedback_thanks:'¡Gracias! Su opinión es valiosa. 🙏',
+  consent_title:'🔬 Consentimiento para investigación',
+  consent_desc:'Sus datos, de forma anónima, podrían contribuir a la investigación sobre PAIS.',
+  consent_data_label:'Consiento el uso anónimo de mis datos para la investigación científica',
+  consent_contact_label:'Consiento ser contactado/a para futuros estudios de investigación',
+  consent_note:'Datos tratados de acuerdo con el RGPD.',
+  contacts_title:'📬 Ser contactado/a',contacts_desc:'Deje sus datos si desea ser contactado/a para una consulta. Opcional.',
+  contacts_name:'Nombre (opcional)',contacts_email:'Email',contacts_phone:'Teléfono / WhatsApp (opcional)',contacts_note:'Mensaje opcional',
+  contacts_save:'Añadir contactos al PDF',contacts_saved:'✓ Contactos añadidos.',
+  donation_title:'Esta herramienta es gratuita para todos',
+  donation_intro:'Desarrollada para apoyar a los pacientes con secuelas post-infecciosas.',
+  donation_cta:'🙏 Si le ha sido útil, considere una pequeña propina. No es obligatoria, pero muy apreciada.',
+  other_amount:'Otro',revolut_btn:'Revolut',paypal_btn:'PayPal',crypto_btn:'Crypto (USDT)',or_text:'o',
+  donation_note:'Cada contribución ayuda a mantener este servicio gratuito. Muchas gracias.',
+  crypto_modal_title:'💎 Donación USDT (Tron TRC-20)',crypto_note:'⚠️ Enviar solo USDT en la red Tron (TRC-20).',
+  copy_addr:'Copiar',close_modal:'Cerrar',
+  progress:(s,tot)=>`Sección ${s} de ${tot}`,
+  nd:'N/D',none:'ninguno',nd_sel:'ninguna seleccionada',describe:'Describa libremente…',
+  summary_subject:'Evaluación PAIS — BuonsensoClinic',
+  pdf_disclaimer:'Este documento es un resumen de la historia clínica elaborado según la experiencia clínica del Dr. Danilo Buonsenso (BuonsensoClinic). No sustituye una visita médica especializada.',
+  pdf_contact_cta:'Para discutir con un experto: danilobuonsenso.substack.com',
+  local_no_add:'(sin añadidos)',
+  visit_label:'Visita',followup_label:'Seguimiento',
+  fu_changes_header:'CAMBIOS RESPECTO A LA VISITA ANTERIOR',
+  fu_no_changes:'Sin cambios respecto a la visita anterior.',
+  fu_changed:'Modificado',fu_was:'Era',fu_now:'Ahora',
+},
+};
+function t(k){return T[lang][k]||k;}
+
+// ── BELL ─────────────────────────────────────────────
+const bellScale={
+it:[{score:100,desc:'Nessun sintomo; attività normale; piena vita lavorativa e sociale'},{score:90,desc:'Nessun sintomo a riposo; sintomi lievi con attività intensa'},{score:80,desc:'Sintomi lievi a riposo; sintomi moderati con attività intensa; lavora con difficoltà'},{score:70,desc:'Sintomi lievi a riposo; sintomi moderati con qualsiasi attività; lavoro ridotto'},{score:60,desc:'Sintomi moderati a riposo; sintomi gravi con qualsiasi attività'},{score:50,desc:'Sintomi moderati a riposo; principalmente a casa, PEM frequente'},{score:40,desc:'Sintomi moderati-gravi a riposo; principalmente a casa; difficoltà con ADL semplici'},{score:30,desc:'Sintomi gravi a riposo; prevalentemente a letto; dipendente per molte ADL'},{score:20,desc:'Sintomi gravi a riposo; completamente a letto; dipendente per la maggior parte delle ADL'},{score:10,desc:'Sintomi gravi a riposo; completamente a letto; dipendente per tutte le ADL'},],
+en:[{score:100,desc:'No symptoms; normal activity; full work and social life'},{score:90,desc:'No symptoms at rest; mild with intense activity'},{score:80,desc:'Mild at rest; moderate with intense activity; working with difficulty'},{score:70,desc:'Mild at rest; moderate with any activity; reduced work'},{score:60,desc:'Moderate at rest; severe with any activity'},{score:50,desc:'Moderate at rest; mostly homebound, frequent PEM'},{score:40,desc:'Moderate-severe at rest; mostly homebound; difficulty with simple ADLs'},{score:30,desc:'Severe at rest; mostly bedbound; dependent for many ADLs'},{score:20,desc:'Severe at rest; completely bedbound; dependent for most ADLs'},{score:10,desc:'Severe at rest; completely bedbound; dependent for all ADLs'},],
+fr:[{score:100,desc:'Aucun symptôme ; activité normale'},{score:90,desc:'Aucun symptôme au repos ; légers à l\'effort intense'},{score:80,desc:'Légers au repos ; modérés à l\'effort intense'},{score:70,desc:'Légers au repos ; modérés à tout effort ; travail réduit'},{score:60,desc:'Modérés au repos ; graves à tout effort'},{score:50,desc:'Modérés au repos ; principalement à domicile, MPE fréquente'},{score:40,desc:'Modérés-graves au repos ; principalement à domicile'},{score:30,desc:'Graves au repos ; essentiellement alité(e)'},{score:20,desc:'Graves au repos ; complètement alité(e)'},{score:10,desc:'Graves au repos ; complètement alité(e) ; dépendant(e) pour tout'},],
+es:[{score:100,desc:'Sin síntomas; actividad normal'},{score:90,desc:'Sin síntomas en reposo; leves con actividad intensa'},{score:80,desc:'Leves en reposo; moderados con actividad intensa'},{score:70,desc:'Leves en reposo; moderados con cualquier actividad; trabajo reducido'},{score:60,desc:'Moderados en reposo; graves con cualquier actividad'},{score:50,desc:'Moderados en reposo; principalmente en casa, MPE frecuente'},{score:40,desc:'Moderados-graves en reposo; principalmente en casa'},{score:30,desc:'Graves en reposo; principalmente en cama'},{score:20,desc:'Graves en reposo; completamente en cama'},{score:10,desc:'Graves en reposo; completamente en cama; dependiente para todo'},],
+};
+const ADL={
+it:['Lavarmi / fare la doccia','Vestirmi da solo/a','Prepararmi un pasto semplice','Mangiare in modo autonomo','Andare in bagno da solo/a','Muovermi dentro casa','Salire/scendere le scale','Uscire di casa brevemente','Guidare o usare i mezzi pubblici','Fare la spesa (anche online)','Leggere o guardare la TV','Usare il telefono o computer','Lavorare (anche part-time o da casa)','Partecipare ad attività sociali'],
+en:['Wash myself / shower','Dress myself','Prepare a simple meal','Eat independently','Use the bathroom independently','Move around the house','Climb/descend stairs','Leave the house briefly','Drive or use public transport','Go shopping (including online)','Read or watch TV','Use phone or computer','Work (even part-time or from home)','Participate in social activities'],
+fr:['Me laver / prendre une douche','M\'habiller seul(e)','Préparer un repas simple','Manger de façon autonome','Aller aux toilettes seul(e)','Me déplacer dans la maison','Monter/descendre les escaliers','Sortir brièvement','Conduire ou utiliser les transports','Faire les courses','Lire ou regarder la télévision','Utiliser le téléphone ou l\'ordinateur','Travailler (même à temps partiel)','Participer à des activités sociales'],
+es:['Lavarme / ducharme','Vestirme solo/a','Prepararme una comida sencilla','Comer de forma autónoma','Ir al baño solo/a','Moverme por casa','Subir/bajar escaleras','Salir de casa brevemente','Conducir o usar transporte público','Hacer la compra','Leer o ver la televisión','Usar el teléfono o el ordenador','Trabajar (aunque sea a tiempo parcial)','Participar en actividades sociales'],
+};
+
+// ── QUESTIONS ─────────────────────────────────────────
+const questions=[
+  {section:{it:'1 · Dati personali',en:'1 · Personal information',fr:'1 · Données personnelles',es:'1 · Datos personales'},q:{it:'Come si chiama e quanti anni ha?',en:'What is your name and age?',fr:'Quel est votre nom et quel âge avez-vous ?',es:'¿Cómo se llama y cuántos años tiene?'},hint:{it:'Nome, età, sesso',en:'First name, age, sex',fr:'Prénom, âge, sexe',es:'Nombre, edad, sexo'},type:'text',key:'name_age',showUpload:false},
+  {section:{it:'1 · Dati personali',en:'1 · Personal information',fr:'1 · Données personnelles',es:'1 · Datos personales'},q:{it:'Dove risiede e con chi vive?',en:'Where do you live and who do you live with?',fr:'Où résidez-vous et avec qui ?',es:'¿Dónde reside y con quién vive?'},hint:{it:'Paese/regione; solo, con familiare…',en:'Country/region; alone, with family…',fr:'Pays/région ; seul(e), en famille…',es:'País/región; solo/a, con familiar…'},type:'text',key:'residence',showUpload:false},
+  {section:{it:'2 · Storia della malattia',en:'2 · Illness history',fr:'2 · Histoire de la maladie',es:'2 · Historia de la enfermedad'},q:{it:'Quando ha iniziato a stare male? C\'era un evento scatenante?',en:'When did you first become ill? Was there a triggering event?',fr:'Quand avez-vous commencé à être malade ?',es:'¿Cuándo empezó a sentirse mal? ¿Hubo un desencadenante?'},hint:{it:'Data approssimativa, infezione, stress, vaccino…',en:'Approximate date, infection, stress, vaccine…',fr:'Date approximative, infection, stress, vaccin…',es:'Fecha aproximada, infección, estrés, vacuna…'},type:'textarea',key:'onset',showUpload:false},
+  {section:{it:'2 · Storia della malattia',en:'2 · Illness history',fr:'2 · Histoire de la maladie',es:'2 · Historia de la enfermedad'},q:{it:'Ha ricevuto una diagnosi? Quale e da chi?',en:'Have you received a diagnosis? Which and from whom?',fr:'Avez-vous reçu un diagnostic ?',es:'¿Ha recibido algún diagnóstico?'},hint:{it:'ME/CFS, fibromialgia, Long Covid, POTS, altra…',en:'ME/CFS, fibromyalgia, Long Covid, POTS, other…',fr:'EM/SFC, fibromyalgie, Covid long, POTS…',es:'EM/SFC, fibromialgia, Covid persistente, POTS…'},type:'textarea',key:'diagnosis',showUpload:false},
+  {section:{it:'3 · Sintomi principali',en:'3 · Main symptoms',fr:'3 · Symptômes principaux',es:'3 · Síntomas principales'},q:{it:'Quanto è grave la fatica? È costante o a intermittenza?',en:'How severe is your fatigue? Constant or intermittent?',fr:'Quelle est la gravité de votre fatigue ?',es:'¿Qué tan grave es su fatiga?'},hint:{it:'Valuti su scala 0–10 e descriva',en:'Rate 0–10 and describe',fr:'Évaluez de 0 à 10 et décrivez',es:'Valore de 0 a 10 y describa'},type:'slider_text',key:'fatigue',showUpload:false},
+  {section:{it:'3 · Sintomi principali',en:'3 · Main symptoms',fr:'3 · Symptômes principaux',es:'3 · Síntomas principales'},q:{it:'Ha PEM (peggioramento post-sforzo)?',en:'Do you experience PEM (post-exertional malaise)?',fr:'Avez-vous une MPE (malaise post-effort) ?',es:'¿Tiene MPE (malestar post-esfuerzo)?'},hint:{it:'Tipo di sforzo, latenza, durata',en:'Triggering effort, latency, duration',fr:'Type d\'effort, latence, durée',es:'Tipo de esfuerzo, latencia, duración'},type:'textarea',key:'pem',showUpload:false},
+  {section:{it:'3 · Sintomi principali',en:'3 · Main symptoms',fr:'3 · Symptômes principaux',es:'3 · Síntomas principales'},q:{it:'Come dorme?',en:'How is your sleep?',fr:'Comment dormez-vous ?',es:'¿Cómo duerme?'},hint:{it:'Ore di sonno, qualità, riposato al mattino?',en:'Hours, quality, rested in the morning?',fr:'Heures, qualité, reposé(e) le matin ?',es:'Horas, calidad, ¿descansado/a?'},type:'textarea',key:'sleep',showUpload:false},
+  {section:{it:'3 · Sintomi principali',en:'3 · Main symptoms',fr:'3 · Symptômes principaux',es:'3 · Síntomas principales'},q:{it:'Ha problemi cognitivi ("brain fog")?',en:'Do you experience cognitive issues ("brain fog")?',fr:'Avez-vous des problèmes cognitifs ?',es:'¿Tiene problemas cognitivos ("niebla mental")?'},hint:{it:'Concentrazione, memoria, trovare le parole…',en:'Concentration, memory, word-finding…',fr:'Concentration, mémoire, trouver les mots…',es:'Concentración, memoria, encontrar palabras…'},type:'textarea',key:'cognition',showUpload:false},
+  {section:{it:'3 · Sintomi principali',en:'3 · Main symptoms',fr:'3 · Symptômes principaux',es:'3 · Síntomas principales'},q:{it:'Ha dolore? Dove e di che tipo?',en:'Do you experience pain?',fr:'Avez-vous des douleurs ?',es:'¿Tiene dolor?'},hint:{it:'Muscolare, articolare, cefalea, neuropatico…',en:'Muscular, joint, headache, neuropathic…',fr:'Musculaire, articulaire, céphalées…',es:'Muscular, articular, cefalea, neuropático…'},type:'textarea',key:'pain',showUpload:false},
+  {section:{it:'3 · Sintomi principali',en:'3 · Main symptoms',fr:'3 · Symptômes principaux',es:'3 · Síntomas principales'},q:{it:'Ha sintomi di intolleranza ortostatica o POTS?',en:'Do you have orthostatic intolerance or POTS?',fr:'Avez-vous des symptômes d\'intolérance orthostatique ou de POTS ?',es:'¿Tiene síntomas de intolerancia ortostática o POTS?'},hint:{it:'Palpitazioni/tachicardia in piedi, capogiri, svenimenti…',en:'Palpitations/tachycardia upright, dizziness, fainting…',fr:'Palpitations debout, vertiges en se levant…',es:'Palpitaciones de pie, mareos al levantarse…'},type:'textarea',key:'oi_pots',showUpload:false},
+  {section:{it:'3 · Sintomi principali',en:'3 · Main symptoms',fr:'3 · Symptômes principaux',es:'3 · Síntomas principales'},q:{it:'Ha altri sintomi?',en:'Other symptoms?',fr:'Autres symptômes ?',es:'¿Otros síntomas?'},hint:{it:'',en:'',fr:'',es:''},type:'multicheck',key:'other_symptoms',options:{it:['Sensibilità chimica / profumi','Sensibilità a luci o rumori','Problemi digestivi (IBS, nausea, reflusso)','Sensazione di freddo/caldo anomalo','Equilibrio / vertigini','Sintomi urinari','Problemi ormonali / ciclo mestruale','Febbre bassa / sudorazioni notturne','Gonfiore / linfonodi','Sintomi simil-influenzali ricorrenti','Vista offuscata / fotofobia','Formicolio / intorpidimento','Altro'],en:['Chemical / perfume sensitivity','Light or noise sensitivity','Digestive issues (IBS, nausea, reflux)','Abnormal cold/heat sensation','Balance / dizziness','Urinary symptoms','Hormonal issues / menstrual cycle','Low-grade fever / night sweats','Swelling / lymph nodes','Recurrent flu-like symptoms','Blurred vision / photophobia','Tingling / numbness','Other'],fr:['Sensibilité chimique / parfums','Sensibilité à la lumière ou aux bruits','Troubles digestifs','Sensation anormale de froid/chaud','Équilibre / vertiges','Symptômes urinaires','Problèmes hormonaux','Fièvre légère / sueurs nocturnes','Gonflement / ganglions','Symptômes pseudo-grippaux','Vision floue / photophobie','Fourmillements / engourdissements','Autre'],es:['Sensibilidad química / perfumes','Sensibilidad a luces o ruidos','Problemas digestivos','Sensación anormal de frío/calor','Equilibrio / mareos','Síntomas urinarios','Problemas hormonales','Febrícula / sudores nocturnos','Inflamación / ganglios','Síntomas seudogripales','Visión borrosa / fotofobia','Hormigueo / entumecimiento','Otro']},showUpload:false},
+  {section:{it:'3 · Sintomi principali',en:'3 · Main symptoms',fr:'3 · Symptômes principaux',es:'3 · Síntomas principales'},q:{it:'Aggiunga liberamente altri sintomi',en:'Freely add any other symptom',fr:'Ajoutez librement tout autre symptôme',es:'Añada libremente otros síntomas'},hint:{it:'Variazioni stagionali, fattori che migliorano o peggiorano',en:'Seasonal variations, factors that improve/worsen',fr:'Variations saisonnières, facteurs aggravants/améliorants',es:'Variaciones estacionales, factores que mejoran o empeoran'},type:'textarea',key:'other_free',showUpload:false},
+  {section:{it:'4 · Funzionamento quotidiano',en:'4 · Daily functioning',fr:'4 · Fonctionnement quotidien',es:'4 · Funcionamiento diario'},q:{it:'Scala di Bell: quale livello descrive la sua condizione?',en:'Bell Scale: which level best describes your condition?',fr:'Échelle de Bell : quel niveau décrit le mieux votre état ?',es:'Escala de Bell: ¿qué nivel describe mejor su estado?'},hint:{it:'Clicca il livello — verrà incluso nel PDF',en:'Click the level — it will be included in the PDF',fr:'Cliquez le niveau — il sera inclus dans le PDF',es:'Haga clic en el nivel — se incluirá en el PDF'},type:'bell',key:'bell_score',showUpload:false},
+  {section:{it:'4 · Funzionamento quotidiano',en:'4 · Daily functioning',fr:'4 · Fonctionnement quotidien',es:'4 · Funcionamiento diario'},q:{it:'Cosa riesce a fare da solo/a nella giornata tipo?',en:'What can you do independently in a typical day?',fr:'Que pouvez-vous faire seul(e) dans une journée type ?',es:'¿Qué puede hacer de forma independiente en un día típico?'},hint:{it:'',en:'',fr:'',es:''},type:'adl',key:'adl_can',showUpload:false},
+  {section:{it:'4 · Funzionamento quotidiano',en:'4 · Daily functioning',fr:'4 · Fonctionnement quotidien',es:'4 · Funcionamiento diario'},q:{it:'Quante ore al giorno a letto o a riposo? Riesce a stare seduto/a?',en:'How many hours per day in bed or resting? Can you sit upright?',fr:'Combien d\'heures par jour au lit ? Pouvez-vous rester assis(e) ?',es:'¿Cuántas horas al día en cama? ¿Puede permanecer sentado/a?'},hint:{it:'Es: "8h a letto + 4 sul divano; seduto >20min peggiora"',en:'E.g. "8h in bed + 4h sofa; sitting >20min worsens"',fr:'Ex : « 8h au lit + 4h sur canapé »',es:'Ej.: "8h en cama + 4h sofá"'},type:'textarea',key:'rest_hours',showUpload:false},
+  {section:{it:'4 · Funzionamento quotidiano',en:'4 · Daily functioning',fr:'4 · Fonctionnement quotidien',es:'4 · Funcionamiento diario'},q:{it:'Descriva una giornata "buona" e una "cattiva" tipiche',en:'Describe a typical "good day" and a "bad day"',fr:'Décrivez une « bonne journée » et une « mauvaise journée »',es:'Describa un día "bueno" y un día "malo" típicos'},hint:{it:'Aiuta a capire la variabilità',en:'Helps understand variability',fr:'Aide à comprendre la variabilité',es:'Ayuda a entender la variabilidad'},type:'textarea',key:'good_bad_day',showUpload:false},
+  {section:{it:'5 · Anamnesi medica',en:'5 · Medical history',fr:'5 · Antécédents médicaux',es:'5 · Antecedentes médicos'},q:{it:'Quali farmaci, integratori o terapie sta assumendo?',en:'What medications, supplements or therapies are you taking?',fr:'Quels médicaments, compléments ou thérapies prenez-vous ?',es:'¿Qué medicamentos, suplementos o terapias está tomando?'},hint:{it:'Nome, dosaggio, da quanto tempo',en:'Name, dosage, how long',fr:'Nom, posologie, durée',es:'Nombre, dosis, desde cuándo'},type:'textarea',key:'medications',showUpload:false},
+  {section:{it:'5 · Anamnesi medica',en:'5 · Medical history',fr:'5 · Antécédents médicaux',es:'5 · Antecedentes médicos'},q:{it:'Ha altre patologie già diagnosticate?',en:'Do you have other diagnosed conditions?',fr:'Avez-vous d\'autres pathologies diagnostiquées ?',es:'¿Tiene otras enfermedades ya diagnosticadas?'},hint:{it:'Tiroidite, celiachia, endometriosi, Ehlers-Danlos, SIBO, MCAS…',en:'Thyroiditis, celiac, endometriosis, Ehlers-Danlos, SIBO, MCAS…',fr:'Thyroïdite, cœliaque, endométriose, Ehlers-Danlos, SIBO, MCAS…',es:'Tiroiditis, celiaquía, endometriosis, Ehlers-Danlos, SIBO, MCAS…'},type:'textarea',key:'comorbidities',showUpload:false},
+  {section:{it:'5 · Anamnesi medica',en:'5 · Medical history',fr:'5 · Antécédents médicaux',es:'5 · Antecedentes médicos'},q:{it:'Inserisca qui i risultati degli esami — copi e incolli o trascriva i valori con data e tipo di test',en:'Enter your test results here — copy, paste or transcribe values with date and test name',fr:'Saisissez ici vos résultats d\'examens — copiez, collez ou transcrivez avec date et type de test',es:'Introduzca aquí los resultados de sus pruebas — copie, pegue o transcriba con fecha y tipo de prueba'},hint:{it:'Es: "Emocromo 12/03/2024: Hb 11.2 (bassa), GB 7800. EBV IgG positivo. ANA 1:320 positivo. TSH 2.1 normale." — Inserisca ogni esame su una riga con data e risultato.',en:'E.g. "CBC 12/03/2024: Hb 11.2 (low), WBC 7800. EBV IgG positive. ANA 1:320 positive. TSH 2.1 normal." — Enter each test on a new line with date and result.',fr:'Ex: "NFS 12/03/2024: Hb 11.2 (bas), GB 7800. EBV IgG positif. ANA 1:320 positif. TSH 2.1 normal." — Un examen par ligne avec date et résultat.',es:'Ej: "Hemograma 12/03/2024: Hb 11.2 (bajo), GB 7800. EBV IgG positivo. ANA 1:320 positivo. TSH 2.1 normal." — Un análisis por línea con fecha y resultado.'},type:'textarea_large',key:'exams_notes',showUpload:false},
+  {section:{it:'6 · Impatto e supporto',en:'6 · Impact & support',fr:'6 · Impact et soutien',es:'6 · Impacto y apoyo'},q:{it:'Come ha impattato la malattia sulla vita lavorativa?',en:'How has the illness affected your work or school life?',fr:'Comment la maladie a-t-elle impacté votre vie professionnelle ?',es:'¿Cómo ha afectado la enfermedad a su vida laboral?'},hint:{it:'In malattia, ridotto orario, ha smesso, invalidità…',en:'Sick leave, reduced hours, stopped, disability…',fr:'Arrêt maladie, horaires réduits, invalidité…',es:'Baja laboral, jornada reducida, invalidez…'},type:'textarea',key:'work_impact',showUpload:false},
+  {section:{it:'6 · Impatto e supporto',en:'6 · Impact & support',fr:'6 · Impact et soutien',es:'6 · Impacto y apoyo'},q:{it:'Ha una rete di supporto? Di cosa ha più bisogno?',en:'Do you have a support network? What do you need most?',fr:'Avez-vous un réseau de soutien ?',es:'¿Tiene una red de apoyo?'},hint:{it:'Aiuto con le faccende, supporto emotivo, assistenza medica…',en:'Help with chores, emotional support, medical care…',fr:'Aide ménagère, soutien émotionnel, soins médicaux…',es:'Ayuda con tareas, apoyo emocional, atención médica…'},type:'textarea',key:'support',showUpload:false},
+  {section:{it:'7 · Aspettative',en:'7 · Expectations',fr:'7 · Attentes',es:'7 · Expectativas'},q:{it:'Cosa si aspetta da questo consulto?',en:'What do you expect from this consultation?',fr:'Qu\'attendez-vous de cette consultation ?',es:'¿Qué espera de esta consulta?'},hint:{it:'Conferma diagnosi, trattamento, gestione sintomi, invalidità…',en:'Confirm diagnosis, treatment, symptom management, disability…',fr:'Confirmation du diagnostic, traitement, gestion des symptômes…',es:'Confirmar diagnóstico, tratamiento, manejo de síntomas…'},type:'textarea',key:'expectations',showUpload:false},
+  {section:{it:'8 · Spazio libero',en:'8 · Free space',fr:'8 · Espace libre',es:'8 · Espacio libre'},q:{it:'C\'è qualcosa di importante che vuole aggiungere?',en:'Is there anything important you\'d like to add?',fr:'Y a-t-il quelque chose d\'important à ajouter ?',es:'¿Hay algo importante que quiera añadir?'},hint:{it:'Impressioni, timori, speranze — questo spazio è suo',en:'Impressions, fears, hopes — this space is yours',fr:'Impressions, craintes, espoirs — cet espace est le vôtre',es:'Impresiones, temores, esperanzas — este espacio es suyo'},type:'textarea',key:'free_space',showUpload:false},
+  
+];
+
+// ╔══════════════════════════════════════════════════╗
+// ║  CODICE PAZIENTE                                 ║
+// ╚══════════════════════════════════════════════════╝
+function generateCode(){
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code='';
+  for(let i=0;i<8;i++){
+    if(i===4)code+='-';
+    code+=chars[Math.floor(Math.random()*chars.length)];
+  }
+  return code;
+}
+
+function saveToLocalStorage(code, data){
+  try{localStorage.setItem('pais_'+code, JSON.stringify(data));}catch(e){console.warn('localStorage not available');}
+}
+function loadFromLocalStorage(code){
+  try{const d=localStorage.getItem('pais_'+code);return d?JSON.parse(d):null;}catch(e){return null;}
+}
+
+// ╔══════════════════════════════════════════════════╗
+// ║  SESSION EXPORT / IMPORT                         ║
+// ╚══════════════════════════════════════════════════╝
+function buildSessionData(){
+  return {
+    version:2,
+    code:patientCode,
+    visitNumber,
+    visitDate,
+    lang,
+    answers:JSON.parse(JSON.stringify(answers)),
+    history: prevAnswers ? [{visitNumber: visitNumber-1, date: prevAnswers._visitDate||'', answers: prevAnswers}] : [],
+  };
+}
+
+function exportSession(){
+  const data=buildSessionData();
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  const patName=(answers.name_age||'patient').replace(/[^a-zA-Z0-9]/g,'-').substring(0,15);
+  a.download=`PAIS-${patName}-${patientCode}-V${visitNumber}.json`;
+  a.click();
+}
+
+function loadFromFile(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!data.code||!data.answers)throw new Error('Invalid file');
+      initFollowupFromData(data);
+    }catch(err){
+      document.getElementById('fu-code-error').textContent=lang==='it'?'File non valido.':'Invalid file.';
+      document.getElementById('fu-code-error').style.display='block';
+    }
+  };
+  reader.readAsText(file);
+}
+
+function loadByCode(){
+  const code=document.getElementById('fu-code-input').value.trim().toUpperCase();
+  const data=loadFromLocalStorage(code);
+  if(!data){
+    document.getElementById('fu-code-error').textContent=t('fu_code_error');
+    document.getElementById('fu-code-error').style.display='block';
+    return;
+  }
+  initFollowupFromData(data);
+}
+
+function initFollowupFromData(data){
+  patientCode=data.code;
+  visitNumber=(data.visitNumber||1)+1;
+  visitDate=new Date().toLocaleDateString(lang==='it'?'it-IT':lang==='fr'?'fr-FR':lang==='es'?'es-ES':'en-GB');
+  prevAnswers={...data.answers, _visitDate: data.visitDate||''};
+  answers=JSON.parse(JSON.stringify(data.answers)); // pre-fill
+  isFollowup=true;
+  currentStep=0;
+  document.getElementById('progress-wrap').style.display='block';
+  document.getElementById('followup-banner').style.display='block';
+  document.getElementById('fu-banner-text').textContent=t('fu_banner_text');
+  document.getElementById('fu-summary-badge').style.display='block';
+  document.getElementById('fu-summary-label').textContent=t('fu_summary_label');
+  showScreen('screen-questions');
+  renderQuestion();
+}
+
+// ╔══════════════════════════════════════════════════╗
+// ║  LANG                                            ║
+// ╚══════════════════════════════════════════════════╝
+function setLang(l){lang=l;['it','en','fr','es'].forEach(x=>document.getElementById('btn-'+x).classList.toggle('active',x===l));applyStaticTranslations();if(currentStep>=0)renderQuestion();}
+function applyStaticTranslations(){
+  const q=T[lang];
+  const ids={
+    'welcome-title':q.welcome_title,'welcome-subtitle':q.welcome_subtitle,'welcome-sub':q.welcome_sub,'welcome-notice':q.welcome_notice,'welcome-time':q.welcome_time,'author-notice':q.author_notice,'donation-notice':q.donation_notice,
+    'mode-new-title':q.mode_new_title,'mode-new-desc':q.mode_new_desc,'mode-fu-title':q.mode_fu_title,'mode-fu-desc':q.mode_fu_desc,
+    'fu-title':q.fu_title,'fu-desc':q.fu_desc,'fu-code-label':q.fu_code_label,'fu-load-btn':q.fu_load_btn,'fu-or-text':q.fu_or_text,'fu-import-label':q.fu_import_label,'fu-back-text':q.fu_back_text,
+    'back-text':q.back,'voice-btn-text':q.voice_use,
+    'upload-label-section':q.upload_section,'upload-title':q.upload_title,'upload-hint':q.upload_hint,'upload-cta':q.upload_cta,
+    'ai-badge-text':q.ai_badge,'summary-heading':q.summary_heading,'actions-heading':q.actions_heading,
+    'code-display-label':q.code_display_label,'code-display-hint':q.code_display_hint,'copy-code-text':q.copy_code_btn,'export-btn-text2':q.export_btn,
+    'pdf-btn-text':q.pdf_btn,'pdf-gen-text':q.pdf_generating,'export-btn-text':q.export_btn,
+    'copy-btn-text':q.copy_btn,'email-btn-text':q.email_btn,'restart-btn-text':q.restart_btn,
+    'substack-title':q.substack_title,'substack-text':q.substack_text,'substack-btn-text':q.substack_btn,
+    'feedback-title':q.feedback_title,'feedback-sub':q.feedback_sub,'feedback-send-btn':q.feedback_send,
+    'consent-title':q.consent_title,'consent-desc':q.consent_desc,'consent-data-label':q.consent_data_label,'consent-contact-label':q.consent_contact_label,'consent-note':q.consent_note,
+    'contacts-title':q.contacts_title,'contacts-desc':q.contacts_desc,'contacts-name-label':q.contacts_name,'contacts-email-label':q.contacts_email,'contacts-phone-label':q.contacts_phone,'contacts-note-label':q.contacts_note,'contacts-save-btn':q.contacts_save,
+    'donation-title':q.donation_title,'donation-intro':q.donation_intro,'donation-cta':q.donation_cta,'other-amount-text':q.other_amount,
+    'revolut-btn-text':q.revolut_btn,'paypal-btn-text':q.paypal_btn,'crypto-btn-text':q.crypto_btn,'or-text':q.or_text,'or-text2':q.or_text,
+    'donation-note':q.donation_note,'crypto-modal-title':q.crypto_modal_title,'crypto-note-text':q.crypto_note,'copy-usdt':q.copy_addr,'close-modal-text':q.close_modal,
+    
+  };
+  for(const[id,val]of Object.entries(ids)){const el=document.getElementById(id);if(el)el.textContent=val;}
+  const ft=document.getElementById('feedback-text');if(ft)ft.placeholder=q.feedback_placeholder;
+  const nt=document.getElementById('next-text');if(nt&&currentStep>=0){nt.textContent=currentStep===questions.length-1?t('finish'):t('next');}else if(nt)nt.textContent=t('next');
+}
+
+// ╔══════════════════════════════════════════════════╗
+// ║  NAVIGATION                                      ║
+// ╚══════════════════════════════════════════════════╝
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+
+function startNew(){trackEvent('questionnaire_start',{type:'new'});
+  patientCode=generateCode();
+  visitNumber=1;
+  visitDate=new Date().toLocaleDateString(lang==='it'?'it-IT':lang==='fr'?'fr-FR':lang==='es'?'es-ES':'en-GB');
+  isFollowup=false; prevAnswers=null; answers={};
+  currentStep=0;
+  document.getElementById('progress-wrap').style.display='block';
+  document.getElementById('followup-banner').style.display='none';
+  document.getElementById('fu-summary-badge').style.display='none';
+  showScreen('screen-questions');
+  renderQuestion();
+}
+
+function showFollowup(){trackEvent('questionnaire_start',{type:'followup'});showScreen('screen-followup');}
+function goNext(){saveCurrentAnswer();if(currentStep<questions.length-1){currentStep++;renderQuestion();}else generateSummary();}
+function goBack(){saveCurrentAnswer();if(currentStep>0){currentStep--;renderQuestion();}else{showScreen('screen-welcome');document.getElementById('progress-wrap').style.display='none';}}
+function restart(){currentStep=-1;answers={};prevAnswers=null;uploadedFiles=[];generatedSummary='';isFollowup=false;document.getElementById('progress-wrap').style.display='none';document.getElementById('followup-banner').style.display='none';showScreen('screen-welcome');}
+
+// ╔══════════════════════════════════════════════════╗
+// ║  PROGRESS                                        ║
+// ╚══════════════════════════════════════════════════╝
+function updateProgress(){
+  const pct=Math.round((currentStep/questions.length)*100);
+  document.getElementById('progress-fill').style.width=pct+'%';
+  document.getElementById('progress-pct').textContent=pct+'%';
+  const secs=[...new Set(questions.map(q=>q.section[lang]))];
+  document.getElementById('progress-label').textContent=T[lang].progress(secs.indexOf(questions[currentStep].section[lang])+1,secs.length);
+}
+
+// ╔══════════════════════════════════════════════════╗
+// ║  RENDER QUESTION                                 ║
+// ╚══════════════════════════════════════════════════╝
+function hasChanged(key){
+  if(!prevAnswers||prevAnswers[key]===undefined)return false;
+  const prev=JSON.stringify(prevAnswers[key]);
+  const curr=JSON.stringify(answers[key]);
+  return prev!==curr;
+}
+function prevDisplay(key){
+  if(!prevAnswers||prevAnswers[key]===undefined)return '';
+  const v=prevAnswers[key];
+  if(Array.isArray(v))return v.join(', ')||'—';
+  if(typeof v==='object'&&v!==null)return `${v.slider||'?'}/10 — ${v.text||''}`;
+  return String(v||'—');
+}
+
+function renderQuestion(){
+  const q=questions[currentStep];updateProgress();
+  document.getElementById('q-section').textContent=q.section[lang];
+  document.getElementById('q-text').textContent=q.q[lang];
+  document.getElementById('q-hint').textContent=q.hint[lang];
+  const hasVoice=['text','textarea','textarea_large','slider_text'].includes(q.type);
+  document.getElementById('voice-wrap').style.display=hasVoice?'flex':'none';
+  if(isRecording)toggleVoice();
+  document.getElementById('voice-btn-text').textContent=t('voice_use');
+  document.getElementById('voice-status').textContent='';
+  const area=document.getElementById('q-input-area');
+  const saved=answers[q.key];
+  const changed=hasChanged(q.key);
+
+  if(q.type==='text'){area.innerHTML=`<input type="text" id="q-input" value="${saved||''}" ${changed?'style="border-color:var(--changed);background:var(--changed-soft)"':''}>` + (changed?`<span class="changed-indicator">✏️ ${t('changed_label')}</span>`:'' );}
+  else if(q.type==='textarea'){area.innerHTML=`<textarea id="q-input" ${changed?'style="border-color:var(--changed);background:var(--changed-soft)"':''}>${saved||''}</textarea>`;}
+  else if(q.type==='slider_text'){
+    const v=saved?.slider??5;
+    area.innerHTML=`<div style="padding:2px 0"><input type="range" id="q-slider" min="0" max="10" value="${v}" oninput="document.getElementById('sv').textContent=this.value"><div class="slider-value" id="sv">${v}</div><div class="slider-labels"><span>0</span><span>5</span><span>10</span></div></div><textarea id="q-input" placeholder="${t('describe')}" style="margin-top:11px${changed?';border-color:var(--changed);background:var(--changed-soft)':''}">${saved?.text||''}</textarea>`;
+  }
+  else if(q.type==='multicheck'){const opts=q.options[lang];const sel=saved||[];area.innerHTML=`<div class="options-grid">${opts.map(o=>`<label class="option-label ${sel.includes(o)?'selected':''}" onclick="toggleCheck(this,'${q.key}')"><div class="option-dot"></div><span>${o}</span></label>`).join('')}</div>`;}
+  else if(q.type==='adl'){const opts=ADL[lang];const sel=saved||[];area.innerHTML=`<p class="adl-note">${t('adl_note')}</p><div class="options-grid">${opts.map(o=>`<label class="option-label ${sel.includes(o)?'selected':''}" onclick="toggleCheck(this,'${q.key}')"><div class="option-dot"></div><span>${o}</span></label>`).join('')}</div>`;}
+  else if(q.type==='bell'){const scale=bellScale[lang];const ss=saved||null;area.innerHTML=`<p style="font-size:0.78rem;color:var(--text-light);margin-bottom:8px">${t('bell_label')}</p><div class="bell-card"><strong>Bell Disability Scale</strong>${scale.map(item=>`<div class="bell-row ${ss==item.score?'bell-selected':''}" onclick="selectBell(${item.score},'${q.key}',this)"><span class="bell-score">${item.score}</span><span class="bell-desc">${item.desc}</span></div>`).join('')}</div>`;}
+
+  // Previous value hint for follow-up
+  const pvArea=document.getElementById('prev-value-area');
+  if(isFollowup&&prevAnswers&&prevAnswers[q.key]!==undefined){
+    pvArea.innerHTML=`<div class="prev-value">📌 ${t('prev_label')}: <em>${prevDisplay(q.key)}</em></div>`;
+  } else {pvArea.innerHTML='';}
+
+  document.getElementById('upload-section').style.display=q.showUpload?'block':'none';
+  // file upload disabled
+  document.getElementById('next-text').textContent=currentStep===questions.length-1?t('finish'):t('next');
+  document.getElementById('back-text').textContent=t('back');
+}
+
+function selectBell(score,key,row){answers[key]=score;document.querySelectorAll('.bell-row').forEach(r=>r.classList.remove('bell-selected'));row.classList.add('bell-selected');}
+function toggleCheck(label,key){label.classList.toggle('selected');if(!answers[key])answers[key]=[];const txt=label.querySelector('span').textContent;if(label.classList.contains('selected')){if(!answers[key].includes(txt))answers[key].push(txt);}else answers[key]=answers[key].filter(x=>x!==txt);}
+function saveCurrentAnswer(){const q=questions[currentStep];if(q.type==='slider_text'){answers[q.key]={slider:document.getElementById('q-slider')?.value,text:document.getElementById('q-input')?.value};}else if(['text','textarea','textarea_large'].includes(q.type)){const el=document.getElementById('q-input');if(el)answers[q.key]=el.value;}}
+
+// ╔══════════════════════════════════════════════════╗
+// ║  FILES                                           ║
+// ╚══════════════════════════════════════════════════╝
+function handleFiles(f){for(const x of f)uploadedFiles.push(x);renderFileList();}
+function removeFile(i){uploadedFiles.splice(i,1);renderFileList();}
+function renderFileList(){const l=document.getElementById('file-list');if(!l)return;l.innerHTML=uploadedFiles.map((f,i)=>`<div class="file-item">📄 <span>${f.name}</span><span style="color:var(--text-light);font-size:0.74rem;margin-left:3px">(${(f.size/1024).toFixed(0)} KB)</span><button class="rm" onclick="removeFile(${i})">✕</button></div>`).join('');}
+// File upload removed
+
+// ╔══════════════════════════════════════════════════╗
+// ║  VOICE                                           ║
+// ╚══════════════════════════════════════════════════╝
+function toggleVoice(){
+  if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){document.getElementById('voice-status').textContent=t('voice_err');return;}
+  if(isRecording){recognition?.stop();isRecording=false;document.getElementById('voice-btn').classList.remove('recording');document.getElementById('voice-btn-text').textContent=t('voice_use');document.getElementById('voice-status').textContent='';}
+  else{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;recognition=new SR();recognition.lang=lang==='it'?'it-IT':lang==='fr'?'fr-FR':lang==='es'?'es-ES':'en-US';recognition.continuous=true;recognition.interimResults=true;recognition.onstart=()=>{isRecording=true;document.getElementById('voice-btn').classList.add('recording');document.getElementById('voice-btn-text').textContent=t('voice_stop');document.getElementById('voice-status').textContent=t('voice_listening');};recognition.onresult=e=>{let tr='';for(let i=e.resultIndex;i<e.results.length;i++)tr+=e.results[i][0].transcript;const inp=document.getElementById('q-input');if(inp){const b=inp.getAttribute('data-base')||'';inp.value=b+tr;}};recognition.onend=()=>{const inp=document.getElementById('q-input');if(inp)inp.setAttribute('data-base',inp.value);isRecording=false;document.getElementById('voice-btn').classList.remove('recording');document.getElementById('voice-btn-text').textContent=t('voice_use');document.getElementById('voice-status').textContent='';};recognition.start();}
+}
+
+// ╔══════════════════════════════════════════════════╗
+// ║  GENERATE SUMMARY                                ║
+// ╚══════════════════════════════════════════════════╝
+
+
+async function generateSummary(){
+  trackEvent('summary_generated',{visit:visitNumber,is_followup:isFollowup});
+  saveCurrentAnswer();
+  answers._visitDate=visitDate;
+  saveToLocalStorage(patientCode, buildSessionData());
+  showScreen('screen-summary');
+  document.getElementById('patient-code-display').textContent=patientCode;
+  document.getElementById('code-display-label').textContent=t('code_display_label');
+  document.getElementById('code-display-hint').textContent=t('code_display_hint');
+  if(isFollowup){
+    const dtEl=document.getElementById('donation-title');
+    const dcEl=document.getElementById('donation-cta');
+    if(dtEl&&T[lang].donation_title_fu)dtEl.textContent=T[lang].donation_title_fu;
+    if(dcEl&&T[lang].donation_cta_fu)dcEl.textContent=T[lang].donation_cta_fu;
+  }
+  const out=document.getElementById('summary-output');
+  out.value=lang==='it'?'⏳ Lettura documenti e generazione sunto clinico in corso…\n\nSe hai allegato referti, verranno analizzati automaticamente. Attendi qualche secondo.':'⏳ Reading documents and generating clinical summary…\n\nIf you attached test results, they will be analysed automatically. Please wait.';
+
+  try{
+    // Read uploaded files as base64 for AI analysis
+    const fileContents = await readUploadedFiles();
+    const messages = await buildMessages(fileContents);
+    const res = await fetch('https://pais-bc-proxy.thekookbitcoiner.workers.dev',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({model:'claude-sonnet-4-5-20251022',max_tokens:8000,messages:messages})
+    });
+    if(!res.ok){const errText=await res.text();console.error('Worker error:',res.status,errText);throw new Error('Worker error '+res.status);}
+    const data = await res.json();
+    if(data.error){console.error('Anthropic error:',data.error);throw new Error(data.error.message||JSON.stringify(data.error));}
+    const text = data.content?.map(c=>c.text||'').join('\n')||'';
+    if(!text){console.warn('Empty response from API');throw new Error('Empty response');}
+    generatedSummary = text;
+  }catch(e){
+    console.error('API error:', e);
+    generatedSummary = buildLocalSummary();
+    out.value = (lang==='it'?'⚠️ Connessione AI non disponibile. Ecco il sunto strutturato:\n\n':'⚠️ AI connection unavailable. Here is the structured summary:\n\n') + generatedSummary;
+    return;
+  }
+  out.value = generatedSummary;
+}
+
+// ── Read uploaded files and convert to base64 ──────────────────────
+async function readUploadedFiles(){ return []; }
+
+
+
+// ── Build messages array with files + text ─────────────────────────
+async function buildMessages(fileContents){
+  const userContent = [];
+  userContent.push({ type:'text', text:buildPrompt(fileContents) });
+  return [{ role:'user', content:userContent }];
+}
+
+function buildChangesBlock(){
+  if(!prevAnswers)return '';
+  const changes=[];
+  for(const q of questions){
+    const key=q.key;
+    if(prevAnswers[key]===undefined||answers[key]===undefined)continue;
+    if(JSON.stringify(prevAnswers[key])!==JSON.stringify(answers[key])){
+      changes.push({label:q.q[lang],was:prevDisplay(key),now:(()=>{const v=answers[key];if(Array.isArray(v))return v.join(', ');if(typeof v==='object'&&v!==null)return `${v.slider||'?'}/10 — ${v.text||''}`;return String(v||'—');})()});
+    }
+  }
+  if(changes.length===0)return `\n\n${t('fu_changes_header')}:\n${t('fu_no_changes')}`;
+  return `\n\n${t('fu_changes_header')}:\n`+changes.map(c=>`• ${c.label}\n  ${t('fu_was')}: ${c.was}\n  ${t('fu_now')}: ${c.now}`).join('\n');
+}
+
+function buildPrompt(fileContents){
+  const a=answers;
+  const bell=a.bell_score?`${a.bell_score}/100`:t('nd');
+  const adl=(a.adl_can||[]).join(', ')||t('nd_sel');
+  const hasFiles = fileContents && fileContents.filter(f=>!f.error).length > 0;
+  const fileNames = uploadedFiles.map(f=>f.name).join(', ') || t('none');
+  const li={it:'Rispondi SEMPRE in italiano.',en:'Reply ALWAYS in English.',fr:'Réponds TOUJOURS en français.',es:'Responde SIEMPRE en español.'};
+
+  const interpretiveInstructions = {
+    it: `Sei il Dr. Danilo Buonsenso, medico specialista in sequele post-infettive acute (PAIS/ME-CFS/Long Covid/POTS), con sede alla BuonsensoClinic.
+
+Un paziente ha completato il questionario di valutazione iniziale e ha allegato i suoi documenti medici. Il tuo compito è generare un REFERTO CLINICO INTERPRETATIVO E DISCORSIVO — non un semplice elenco di dati, ma un documento che ragioni clinicamente sui sintomi e sugli esami, come faresti in una vera visita.
+
+Il documento deve:
+1. INTRODUZIONE DISCORSIVA: presentare il paziente e il quadro clinico generale in modo narrativo
+2. ANALISI DEI SINTOMI: interpretare clinicamente i sintomi riportati, non solo elencarli. Valutare se soddisfano i criteri diagnostici per ME/CFS (criteri ICC/Canadian Consensus), Long Covid, POTS. Specificare la severità (lieve/moderata/severa/molto severa) basandosi sulla Bell Scale e sulle ADL.
+3. ANALISI DEGLI ESAMI: se sono stati allegati documenti o referti, analizzarli in dettaglio evidenziando valori anomali, pattern significativi, ciò che è normale e ciò che non lo è. Se il paziente ha descritto risultati nel testo, interpretarli.
+4. DIAGNOSI DIFFERENZIALE: ragionare su cosa è stato ragionevolmente escluso dai sintomi/esami e cosa rimane da escludere.
+5. QUADRO CLINICO COMPLESSIVO: una sintesi interpretativa — "il quadro è compatibile con..." — con motivazione clinica.
+6. PUNTI DA DISCUTERE CON IL MEDICO: 4-6 elementi concreti e prioritizzati per la visita specialistica.
+7. NOTE SUL FOLLOW-UP: se è un follow-up, confrontare con la visita precedente e commentare l'evoluzione.
+
+Usa un linguaggio medico preciso ma comprensibile anche al paziente. Sii diretto e clinicamente onesto. Non inventare dati non forniti. Usa la prima persona plurale ("osserviamo", "il quadro mostra"). Termina sempre con il disclaimer che questo non sostituisce la visita.`,
+
+    en: `You are Dr. Danilo Buonsenso, a specialist in post-acute infectious sequelae (PAIS/ME-CFS/Long Covid/POTS) at BuonsensoClinic.
+
+A patient has completed the initial assessment questionnaire and attached their medical documents. Your task is to generate an INTERPRETIVE AND DISCURSIVE CLINICAL REPORT — not a simple list of data, but a document that reasons clinically about the symptoms and tests, as you would in a real consultation.
+
+The document must:
+1. DISCURSIVE INTRODUCTION: present the patient and general clinical picture narratively
+2. SYMPTOM ANALYSIS: clinically interpret the reported symptoms, not just list them. Assess whether they meet diagnostic criteria for ME/CFS (ICC/Canadian Consensus criteria), Long Covid, POTS. Specify severity (mild/moderate/severe/very severe) based on Bell Scale and ADLs.
+3. TEST ANALYSIS: if documents or results have been attached, analyse them in detail highlighting abnormal values, significant patterns, what is normal and what is not. If the patient described results in text, interpret them.
+4. DIFFERENTIAL DIAGNOSIS: reason about what has been reasonably excluded by symptoms/tests and what remains to be excluded.
+5. OVERALL CLINICAL PICTURE: an interpretive synthesis — "the picture is compatible with..." — with clinical rationale.
+6. POINTS TO DISCUSS WITH THE DOCTOR: 4-6 concrete, prioritised items for the specialist visit.
+7. FOLLOW-UP NOTES: if this is a follow-up, compare with the previous visit and comment on the evolution.
+
+Use precise medical language that is also understandable to the patient. Be direct and clinically honest. Do not invent data not provided. Use first person plural ("we observe", "the picture shows"). Always end with the disclaimer that this does not replace a medical visit.`,
+
+    fr: `Vous êtes le Dr Danilo Buonsenso, spécialiste des séquelles post-infectieuses aiguës (PAIS/EM/SFC/Covid long/POTS) à la BuonsensoClinic.
+
+Un patient a rempli le questionnaire d'évaluation initiale et a joint ses documents médicaux. Votre tâche est de générer un RAPPORT CLINIQUE INTERPRÉTATIF ET DISCURSIF — pas une simple liste de données, mais un document qui raisonne cliniquement sur les symptômes et les examens, comme vous le feriez lors d'une vraie consultation.
+
+Le document doit inclure : introduction discursive, analyse des symptômes, analyse des examens joints, diagnostic différentiel, tableau clinique global interprétatif, points à discuter avec le médecin (4-6 éléments prioritaires), et notes de suivi si applicable.`,
+
+    es: `Usted es el Dr. Danilo Buonsenso, especialista en secuelas post-infecciosas agudas (PAIS/EM/SFC/Covid persistente/POTS) en BuonsensoClinic.
+
+Un paciente ha completado el cuestionario de evaluación inicial y ha adjuntado sus documentos médicos. Su tarea es generar un INFORME CLÍNICO INTERPRETATIVO Y DISCURSIVO — no una simple lista de datos, sino un documento que razone clínicamente sobre los síntomas y las pruebas, como lo haría en una consulta real.
+
+El documento debe incluir: introducción discursiva, análisis de síntomas, análisis de pruebas adjuntas, diagnóstico diferencial, cuadro clínico global interpretativo, puntos a discutir con el médico (4-6 elementos prioritarios), y notas de seguimiento si aplica.`
+  };
+
+  const visitInfo = isFollowup
+    ? `VISITA N. ${visitNumber} (Follow-up) | Visita precedente: ${prevAnswers?._visitDate||'N/D'} | Codice: ${patientCode}`
+    : `VISITA N. ${visitNumber} (Valutazione iniziale) | Codice: ${patientCode} | Data: ${visitDate}`;
+
+  const changesNote = isFollowup ? buildChangesBlock() : '';
+
+  return `${interpretiveInstructions[lang] || interpretiveInstructions.en}
+
+${li[lang]}
+
+═══ DATI DEL PAZIENTE ═══
+${visitInfo}
+
+ANAGRAFICA: ${a.name_age||t('nd')} — ${a.residence||t('nd')}
+ESORDIO: ${a.onset||t('nd')}
+DIAGNOSI RICEVUTA: ${a.diagnosis||t('nd')}
+
+FATICA (0-10): ${a.fatigue?.slider||t('nd')}/10
+Descrizione fatica: ${a.fatigue?.text||t('nd')}
+PEM (post-exertional malaise): ${a.pem||t('nd')}
+SONNO: ${a.sleep||t('nd')}
+COGNITIVI/BRAIN FOG: ${a.cognition||t('nd')}
+DOLORE: ${a.pain||t('nd')}
+INTOLLERANZA ORTOSTATICA/POTS: ${a.oi_pots||t('nd')}
+ALTRI SINTOMI SELEZIONATI: ${(a.other_symptoms||[]).join(', ')||t('none')}
+SINTOMI AGGIUNTIVI (testo libero): ${a.other_free||t('nd')}
+
+BELL DISABILITY SCALE: ${bell}
+ADL AUTONOME: ${adl}
+ORE DI RIPOSO/LETTO AL GIORNO: ${a.rest_hours||t('nd')}
+GIORNATA TIPO (buona/cattiva): ${a.good_bad_day||t('nd')}
+
+FARMACI/TERAPIE IN CORSO: ${a.medications||t('nd')}
+COMORBIDITÀ: ${a.comorbidities||t('nd')}
+NOTE SU ESAMI (descritte dal paziente): ${a.exams_notes||t('nd')}
+FILE ALLEGATI (descrizione): ${fileNames}${hasFiles ? ' — il paziente ha allegato questi documenti, considerali nella valutazione anche se non puoi leggerli direttamente' : ' [nessun file allegato]'}
+
+IMPATTO LAVORATIVO: ${a.work_impact||t('nd')}
+RETE DI SUPPORTO: ${a.support||t('nd')}
+ASPETTATIVE DAL CONSULTO: ${a.expectations||t('nd')}
+SPAZIO LIBERO (parole del paziente): ${a.free_space||t('nd')}
+NOTE EXTRA: ${a.extra_notes||t('nd')}
+CONSENSO RICERCA: dati anonimi=${consentData?'SÌ':'NO'} | contatto per studi=${consentContact?'SÌ':'NO'}
+${changesNote}
+
+═══ ISTRUZIONI FINALI ═══
+${isFollowup ? 'Questo è un FOLLOW-UP: confronta esplicitamente con la visita precedente, commenta l\'evoluzione clinica, evidenzia miglioramenti o peggioramenti.' : ''}
+${hasFiles ? 'Hai ricevuto documenti medici allegati sopra: analizzali in dettaglio nella sezione apposita del referto.' : 'Nessun documento allegato: basa l\'analisi solo sui dati testuali forniti.'}
+Inizia il referto con "REFERTO CLINICO INTERPRETATIVO — BuonsensoClinic" e le informazioni della visita.
+NON includere il disclaimer finale nel testo — verrà aggiunto automaticamente dal sistema.`;
+}
+
+function buildLocalSummary(){
+  const a=answers,bell=a.bell_score?`${a.bell_score}/100`:t('nd');
+  const adl=(a.adl_can||[]).join('; ')||t('nd_sel');const files=uploadedFiles.map(f=>f.name).join(', ')||t('none');
+  const nd=t('nd');const L=(it,en,fr,es)=>lang==='it'?it:lang==='fr'?fr:lang==='es'?es:en;
+  const visitInfo=`${isFollowup?t('followup_label'):t('visit_label')} ${visitNumber} · ${patientCode} · ${visitDate}`;
+  return `POST ACUTE INFECTIOUS SEQUELAE — BuonsensoClinic\n${visitInfo}\n\n━━ ${L('DATI PERSONALI','PERSONAL DATA','DONNÉES PERSONNELLES','DATOS PERSONALES')} ━━\n• ${L('Paziente','Patient','Patient','Paciente')}: ${a.name_age||nd}\n• ${L('Residenza','Residence','Résidence','Residencia')}: ${a.residence||nd}\n\n━━ ${L('STORIA MALATTIA','ILLNESS HISTORY','HISTOIRE MALADIE','HISTORIA ENFERMEDAD')} ━━\n• ${L('Esordio','Onset','Début','Inicio')}: ${a.onset||nd}\n• ${L('Diagnosi','Diagnosis','Diagnostic','Diagnóstico')}: ${a.diagnosis||nd}\n\n━━ ${L('SINTOMATOLOGIA','SYMPTOMS','SYMPTÔMES','SÍNTOMAS')} ━━\n• ${L('Fatica','Fatigue','Fatigue','Fatiga')}: ${a.fatigue?.slider||nd}/10 — ${a.fatigue?.text||''}\n• PEM: ${a.pem||nd}\n• ${L('Sonno','Sleep','Sommeil','Sueño')}: ${a.sleep||nd}\n• ${L('Cognitivi','Cognitive','Cognitif','Cognitivo')}: ${a.cognition||nd}\n• ${L('Dolore','Pain','Douleur','Dolor')}: ${a.pain||nd}\n• OI/POTS: ${a.oi_pots||nd}\n• ${L('Altri sintomi','Other symptoms','Autres symptômes','Otros síntomas')}: ${(a.other_symptoms||[]).join('; ')||t('none')}\n• ${L('Note sintomi','Symptom notes','Notes symptômes','Notas síntomas')}: ${a.other_free||nd}\n\n━━ ${L('FUNZIONAMENTO','FUNCTIONING','FONCTIONNEMENT','FUNCIONAMIENTO')} ━━\n• Bell Scale: ${bell}\n• ADL: ${adl}\n• ${L('Ore riposo','Rest hours','Heures repos','Horas descanso')}: ${a.rest_hours||nd}\n• ${L('Giornata tipo','Typical day','Journée type','Día típico')}: ${a.good_bad_day||nd}\n\n━━ ${L('ANAMNESI','MEDICAL HISTORY','ANTÉCÉDENTS','ANTECEDENTES')} ━━\n• ${L('Terapie','Treatments','Traitements','Tratamientos')}: ${a.medications||nd}\n• ${L('Comorbidità','Comorbidities','Comorbidités','Comorbilidades')}: ${a.comorbidities||nd}\n• ${L('Esami','Tests','Examens','Pruebas')}: ${a.exams_notes||nd} | ${L('File','Files','Fichiers','Archivos')}: ${files}\n\n━━ ${L('IMPATTO','SOCIAL IMPACT','IMPACT SOCIAL','IMPACTO SOCIAL')} ━━\n• ${L('Lavoro','Work','Travail','Trabajo')}: ${a.work_impact||nd}\n• ${L('Supporto','Support','Soutien','Apoyo')}: ${a.support||nd}\n\n━━ ${L('ASPETTATIVE','EXPECTATIONS','ATTENTES','EXPECTATIVAS')} ━━\n• ${a.expectations||nd}\n\n━━ ${L('SPAZIO LIBERO','FREE SPACE','ESPACE LIBRE','ESPACIO LIBRE')} ━━\n${a.free_space||t('local_no_add')}${buildChangesBlock()}`;
+}
+
+// ╔══════════════════════════════════════════════════╗
+// ║  PDF                                             ║
+// ╚══════════════════════════════════════════════════╝
+async function downloadPDF(){trackEvent('pdf_downloaded',{visit:visitNumber});
+  const summaryText=document.getElementById('summary-output').value;
+  if(!summaryText||summaryText.startsWith('⏳')){alert(lang==='it'?'Attendi la generazione del sunto.':'Please wait for the summary.');return;}
+  document.getElementById('pdf-generating').style.display='flex';
+  document.getElementById('pdf-btn').disabled=true;
+  await new Promise(r=>setTimeout(r,100));
+  try{
+    const {jsPDF}=window.jspdf;const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    const pageW=210,pageH=297,mL=18,mR=18,mT=20,mB=25,tW=pageW-mL-mR;
+    let y=mT;
+    const isfu=isFollowup;
+
+    function checkPage(n=8){if(y+n>pageH-mB){doc.addPage();y=mT;addHeader();}}
+    function addHeader(){
+      doc.setFillColor(isfu?180:74,isfu?120:122,isfu?20:155);
+      doc.rect(0,0,pageW,12,'F');
+      doc.setTextColor(255,255,255);doc.setFontSize(7.5);doc.setFont('helvetica','bold');
+      const htxt=isfu?`POST ACUTE INFECTIOUS SEQUELAE  |  BuonsensoClinic  |  ${t('followup_label').toUpperCase()} V${visitNumber}`:'POST ACUTE INFECTIOUS SEQUELAE  |  BuonsensoClinic';
+      doc.text(htxt,mL,8);
+      doc.setFont('helvetica','normal');doc.text(`${patientCode} · ${visitDate}`,pageW-mR,8,{align:'right'});
+      doc.setTextColor(40,35,32);
+    }
+    addHeader();y=20;
+
+    // Title
+    doc.setFillColor(isfu?255:240,isfu?248:246,isfu?230:250);
+    doc.setDrawColor(isfu?200:180,isfu?160:210,isfu?60:230);
+    doc.roundedRect(mL,y,tW,24,3,3,'FD');
+    doc.setTextColor(isfu?120:74,isfu?80:122,isfu?20:155);
+    doc.setFontSize(12);doc.setFont('helvetica','bold');
+    doc.text('Post Acute Infectious Sequelae',mL+5,y+8);
+    doc.setFontSize(8.5);doc.setFont('helvetica','normal');doc.setTextColor(100,90,80);
+    doc.text(`BuonsensoClinic  ·  ${isfu?t('followup_label')+' '+visitNumber:t('visit_label')+' '+visitNumber}  ·  ${visitDate}`,mL+5,y+15);
+    doc.setFontSize(7.5);doc.setTextColor(130,115,100);
+    doc.text(`${lang==='it'?'Codice paziente':lang==='fr'?'Code patient':lang==='es'?'Código paciente':'Patient code'}: ${patientCode}`,mL+5,y+21);
+    y+=30;
+
+    // Content
+    const lines=summaryText.split('\n');
+    for(const line of lines){
+      checkPage(7);const trimmed=line.trim();
+      if(trimmed.startsWith('━━')){
+        y+=3;checkPage(10);
+        const secTitle=trimmed.replace(/━━/g,'').trim();
+        const isChange=secTitle.includes('VARIA')||secTitle.includes('CHANGE')||secTitle.includes('CHANGEMENT')||secTitle.includes('CAMBIO');
+        doc.setFillColor(isChange?255:230,isChange?248:240,isChange?220:246);
+        doc.rect(mL,y-4,tW,8,'F');
+        doc.setFontSize(7.5);doc.setFont('helvetica','bold');
+        doc.setTextColor(isChange?160:74,isChange?100:122,isChange?20:155);
+        doc.text(secTitle,mL+5,y+0.5);doc.setTextColor(40,35,32);y+=7;
+      } else if(trimmed.startsWith('•')){
+        checkPage(6);doc.setFontSize(8.5);doc.setFont('helvetica','normal');doc.setTextColor(40,35,32);
+        const content=trimmed.substring(1).trim();const wrapped=doc.splitTextToSize(content,tW-8);
+        doc.text('•',mL+2,y);doc.text(wrapped,mL+7,y);y+=wrapped.length*5+1;
+      } else if(trimmed.startsWith('  ')||trimmed.startsWith('→')){
+        checkPage(5);doc.setFontSize(8);doc.setFont('helvetica','italic');doc.setTextColor(100,90,80);
+        const wrapped=doc.splitTextToSize(trimmed,tW-12);doc.text(wrapped,mL+10,y);y+=wrapped.length*4.5+1;
+        doc.setFont('helvetica','normal');doc.setTextColor(40,35,32);
+      } else if(trimmed.length>0){
+        checkPage(6);doc.setFontSize(8.5);doc.setFont('helvetica','normal');doc.setTextColor(40,35,32);
+        const wrapped=doc.splitTextToSize(trimmed,tW);doc.text(wrapped,mL,y);y+=wrapped.length*5+1;
+      } else {y+=3;}
+    }
+
+    // Contacts
+    const cn=document.getElementById('contact-name')?.value;const ce=document.getElementById('contact-email')?.value;const cp=document.getElementById('contact-phone')?.value;const cno=document.getElementById('contact-note')?.value;
+    if(cn||ce||cp){
+      checkPage(28);y+=4;
+      const L2=(it,en,fr,es)=>lang==='it'?it:lang==='fr'?fr:lang==='es'?es:en;
+      doc.setFillColor(230,240,246);doc.rect(mL,y-4,tW,8,'F');
+      doc.setFontSize(7.5);doc.setFont('helvetica','bold');doc.setTextColor(74,122,155);
+      doc.text(L2('CONTATTI PAZIENTE','PATIENT CONTACTS','CONTACTS PATIENT','CONTACTOS PACIENTE'),mL+5,y+0.5);
+      doc.setTextColor(40,35,32);y+=7;doc.setFontSize(8.5);doc.setFont('helvetica','normal');
+      if(cn){doc.text(`• ${L2('Nome','Name','Nom','Nombre')}: ${cn}`,mL+5,y);y+=5;}
+      if(ce){doc.text(`• Email: ${ce}`,mL+5,y);y+=5;}
+      if(cp){doc.text(`• Tel/WhatsApp: ${cp}`,mL+5,y);y+=5;}
+      if(cno){const wnote=doc.splitTextToSize(`• ${L2('Note','Notes','Notes','Notas')}: ${cno}`,tW-8);doc.text(wnote,mL+5,y);y+=wnote.length*5;}
+    }
+
+    // Consent
+    checkPage(14);y+=4;
+    doc.setFillColor(240,246,255);doc.rect(mL,y,tW,12,'F');
+    doc.setFontSize(7.5);doc.setFont('helvetica','bold');doc.setTextColor(74,122,155);
+    doc.text(lang==='it'?'CONSENSO RICERCA':lang==='fr'?'CONSENTEMENT RECHERCHE':lang==='es'?'CONSENTIMIENTO':'RESEARCH CONSENT',mL+4,y+5);
+    doc.setFont('helvetica','normal');doc.setTextColor(60,80,100);doc.setFontSize(8);
+    doc.text(`${lang==='it'?'Dati anonimi':lang==='fr'?'Données anonymes':lang==='es'?'Datos anónimos':'Anonymous data'}: ${consentData?'✓ YES':'✗ NO'}   |   ${lang==='it'?'Contatto studi':lang==='fr'?'Contact études':lang==='es'?'Contacto estudios':'Contact for studies'}: ${consentContact?'✓ YES':'✗ NO'}`,mL+4,y+10);
+    y+=16;
+
+    // Disclaimer
+    checkPage(30);y+=4;
+    doc.setFillColor(255,248,235);doc.setDrawColor(200,160,80);doc.roundedRect(mL,y,tW,26,3,3,'FD');
+    doc.setFontSize(7.5);doc.setFont('helvetica','bold');doc.setTextColor(120,80,20);
+    doc.text(lang==='it'?'NOTA CLINICA':lang==='fr'?'NOTE CLINIQUE':lang==='es'?'NOTA CLÍNICA':'CLINICAL NOTE',mL+4,y+6);
+    doc.setFont('helvetica','normal');doc.setTextColor(80,60,20);
+    const dlines=doc.splitTextToSize(t('pdf_disclaimer'),tW-8);doc.text(dlines,mL+4,y+12);
+    y+=30;
+
+    // Substack CTA
+    checkPage(16);y+=3;
+    doc.setFillColor(255,240,228);doc.setDrawColor(220,100,25);doc.roundedRect(mL,y,tW,14,3,3,'FD');
+    doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(160,60,10);
+    doc.text('📰  Buonsenso & the Kids',mL+4,y+5.5);
+    doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(100,50,10);
+    const ctaLines=doc.splitTextToSize(t('pdf_contact_cta'),tW-8);doc.text(ctaLines,mL+4,y+10);
+    y+=18;
+
+    // Footer pages
+    const totalPages=doc.getNumberOfPages();
+    for(let i=1;i<=totalPages;i++){
+      doc.setPage(i);doc.setFontSize(7);doc.setFont('helvetica','normal');doc.setTextColor(160,150,140);
+      doc.text(`BuonsensoClinic · PAIS · ${patientCode} · ${visitDate}`,mL,pageH-8);
+      doc.text(`${i} / ${totalPages}`,pageW-mR,pageH-8,{align:'right'});
+    }
+
+    const patName=(answers.name_age||'patient').replace(/[^a-zA-Z0-9]/g,'-').substring(0,15);
+    doc.save(`PAIS-${patName}-${patientCode}-V${visitNumber}-${new Date().toISOString().slice(0,10)}.pdf`);
+  }catch(err){console.error(err);alert(lang==='it'?'Errore PDF. Usa "Copia testo".':'PDF error. Use "Copy text".');}
+  document.getElementById('pdf-generating').style.display='none';
+  document.getElementById('pdf-btn').disabled=false;
+}
+
+// ╔══════════════════════════════════════════════════╗
+// ║  COPY / EMAIL                                    ║
+// ╚══════════════════════════════════════════════════╝
+function copyPatientCode(){
+  navigator.clipboard.writeText(patientCode).then(()=>{
+    const msg=document.getElementById('code-copied-msg');
+    msg.textContent=t('code_copied_msg');
+    msg.style.display='block';
+    setTimeout(()=>msg.style.display='none',2500);
+  });
+}
+function copySummary(){navigator.clipboard.writeText(document.getElementById('summary-output').value).then(()=>{const el=document.getElementById('copy-success');el.textContent=t('copied');el.style.display='block';setTimeout(()=>el.style.display='none',2500);});}
+function emailSummary(){const text=encodeURIComponent(document.getElementById('summary-output').value+'\n\n'+t('pdf_disclaimer')+'\n\n'+t('pdf_contact_cta'));window.location.href=`mailto:?subject=${encodeURIComponent(t('summary_subject'))}&body=${text}`;}
+
+// ╔══════════════════════════════════════════════════╗
+// ║  FEEDBACK / CONSENT / CONTACTS / DONATION        ║
+// ╚══════════════════════════════════════════════════╝
+function rateStar(n){starRating=n;for(let i=1;i<=5;i++){const s=document.getElementById('s'+i);s.classList.toggle('active',i<=n);s.classList.toggle('dimmed',i>n);}document.getElementById('feedback-form').style.display='block';}
+function sendFeedback(){const txt=document.getElementById('feedback-text').value;document.getElementById('summary-output').value+=`\n\n[FEEDBACK: ${starRating}/5 — ${txt||''}]`;document.getElementById('feedback-form').style.display='none';document.getElementById('feedback-sent').textContent=t('feedback_thanks');document.getElementById('feedback-sent').style.display='block';}
+function toggleConsent(type){if(type==='data'){consentData=!consentData;document.getElementById('sw-data').classList.toggle('on',consentData);}else{consentContact=!consentContact;document.getElementById('sw-contact').classList.toggle('on',consentContact);}}
+function saveContacts(){const ce=document.getElementById('contact-email').value;const cp=document.getElementById('contact-phone').value;if(!ce&&!cp){document.getElementById('contact-email').focus();return;}document.getElementById('contact-sent').textContent=t('contacts_saved');document.getElementById('contact-sent').style.display='block';}
+function donate(amount,id){document.querySelectorAll('.donation-pill').forEach(p=>p.classList.remove('selected'));selectedDonation=amount;document.getElementById(id).classList.add('selected');document.getElementById('donation-action').style.display='block';}
+function openRevolut(){trackEvent('donation_click',{method:'revolut',amount:selectedDonation});window.open(selectedDonation>0?`${PAY.revolut}/${selectedDonation}`:PAY.revolut,'_blank');}
+function openPaypal(){trackEvent('donation_click',{method:'paypal',amount:selectedDonation});window.open(selectedDonation>0?`${PAY.paypal}/${selectedDonation}EUR`:PAY.paypal,'_blank');}
+function openCrypto(){trackEvent('donation_click',{method:'crypto'});document.getElementById('crypto-modal').classList.add('open');}
+function closeCryptoIfBg(e){if(e.target===document.getElementById('crypto-modal'))document.getElementById('crypto-modal').classList.remove('open');}
+function copyAddr(addrId,btnId){navigator.clipboard.writeText(document.getElementById(addrId).textContent).then(()=>{const b=document.getElementById(btnId);b.textContent='✓';setTimeout(()=>b.textContent=t('copy_addr'),2000);});}
+
+// ╔══════════════════════════════════════════════════╗
+// ║  INIT                                            ║
+// ╚══════════════════════════════════════════════════╝
+applyStaticTranslations();
+</script>
+</body>
+</html>
