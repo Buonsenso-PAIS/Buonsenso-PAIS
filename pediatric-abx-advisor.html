@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PediAbx Advisor — Evidence-Based Pediatric Antibiotic & Antifungal Prescribing</title>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LHN2RQTV7G"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-LHN2RQTV7G');
+  function trackEvent(name, params){try{gtag('event',name,params||{});}catch(e){}}
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&display=swap');
+:root{
+  --bg:#f8fafc;--bg2:#ffffff;--bg3:#f1f5f9;--border:#e2e8f0;--border2:#cbd5e1;
+  --text:#0f172a;--muted:#64748b;--dim:#94a3b8;
+  --blue:#0369a1;--blue-dim:#0284c7;--green:#059669;--amber:#d97706;
+  --red:#dc2626;--purple:#7c3aed;--teal:#0d9488;
+  --mono:'JetBrains Mono',monospace;--sans:'Syne',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:var(--mono);min-height:100vh;line-height:1.6;}
+.header{background:linear-gradient(135deg,#0369a1,#0ea5e9);border-bottom:1px solid var(--border);padding:18px 24px;position:sticky;top:0;z-index:100;}
+.header-inner{max-width:920px;margin:0 auto;}
+.header-top{display:flex;align-items:center;gap:14px;margin-bottom:6px;}
+.logo{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--blue-dim),var(--blue));display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0;box-shadow:0 0 20px #0ea5e933;}
+.app-title{font-family:var(--sans);font-size:20px;font-weight:800;color:#ffffff;letter-spacing:-0.5px;}
+.app-sub{font-size:9px;color:rgba(255,255,255,0.8);letter-spacing:2px;margin-top:1px;}
+.app-author{font-size:10px;color:rgba(255,255,255,0.7);margin-top:2px;font-style:italic;}
+.tabs{display:flex;gap:5px;margin-top:12px;flex-wrap:wrap;}
+.tab{padding:6px 13px;border-radius:8px;border:1px solid rgba(255,255,255,0.4);background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.85);cursor:pointer;font-family:var(--mono);font-size:11px;font-weight:500;transition:all 0.2s;}
+.tab.active{border-color:#ffffff;background:rgba(255,255,255,0.9);color:var(--blue);font-weight:700;}
+.tab:hover:not(.active){border-color:rgba(255,255,255,0.7);color:#ffffff;}
+.main{max-width:920px;margin:0 auto;padding:20px 16px 80px;}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:15px 17px;margin-bottom:12px;}
+.section-title{display:flex;align-items:center;gap:8px;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin:20px 0 9px;border-bottom:1px solid var(--border2);padding-bottom:6px;}
+.therapy-modes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
+.mode-btn{padding:13px 10px;border-radius:12px;border:2px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:var(--mono);text-align:center;transition:all 0.2s;}
+.mode-btn .mode-icon{font-size:22px;margin-bottom:5px;}
+.mode-btn .mode-label{font-size:13px;font-weight:700;display:block;}
+.mode-btn .mode-desc{font-size:10px;opacity:0.7;margin-top:3px;display:block;}
+.mode-btn.empirica.active{border-color:var(--amber);background:rgba(245,158,11,0.1);color:#fcd34d;}
+.mode-btn.mirata.active{border-color:var(--green);background:rgba(16,185,129,0.1);color:#6ee7b7;}
+.mode-btn.mirata:not(.active){opacity:0.5;}
+label.lbl{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
+input[type=text],input[type=number],input[type=password],input[type=email],select,textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 11px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;transition:border-color 0.2s;}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);}
+select option{background:#ffffff;color:#0f172a;}
+textarea{resize:vertical;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.chip{padding:4px 10px;border-radius:16px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:var(--mono);font-size:11px;transition:all 0.15s;}
+.chip.active-blue{border-color:var(--blue);background:rgba(14,165,233,0.15);color:var(--blue);}
+.chip.active-amber{border-color:var(--amber);background:rgba(245,158,11,0.15);color:var(--amber);}
+.chip.active-red{border-color:var(--red);background:rgba(239,68,68,0.15);color:var(--red);}
+.flag-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 13px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all 0.15s;}
+.flag-card.on{border-color:var(--blue);background:rgba(14,165,233,0.06);}
+.flag-check{width:17px;height:17px;border-radius:4px;border:2px solid var(--border);background:transparent;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;flex-shrink:0;}
+.flag-card.on .flag-check{border-color:var(--blue);background:var(--blue);}
+.flag-label{font-size:12px;color:var(--muted);}
+.flag-card.on .flag-label{color:#7dd3fc;}
+.micro-entry{display:flex;justify-content:space-between;align-items:center;background:#f8fafc;border-radius:8px;padding:8px 12px;border:1px solid var(--border);margin-top:8px;}
+.micro-badge{font-size:11px;font-weight:700;}
+.micro-badge.pos{color:#fca5a5;}.micro-badge.neg{color:#86efac;}.micro-badge.wait{color:#fcd34d;}
+.btn-remove{background:none;border:none;color:var(--red);cursor:pointer;font-size:18px;line-height:1;}
+.severity-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:8px;}
+.sev-btn{padding:9px;border-radius:9px;border:2px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:var(--mono);font-size:13px;font-weight:600;transition:all 0.2s;}
+.sev-btn[data-sev="mild"].active{border-color:var(--green);background:rgba(16,185,129,0.12);color:var(--green);}
+.sev-btn[data-sev="moderate"].active{border-color:var(--amber);background:rgba(245,158,11,0.12);color:var(--amber);}
+.sev-btn[data-sev="severe"].active{border-color:var(--red);background:rgba(239,68,68,0.12);color:var(--red);}
+.btn-submit{width:100%;padding:15px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--blue-dim),var(--blue));color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--sans);letter-spacing:0.5px;box-shadow:0 4px 24px rgba(14,165,233,0.3);transition:all 0.2s;margin-top:4px;}
+.btn-submit:hover{box-shadow:0 6px 32px rgba(14,165,233,0.5);transform:translateY(-1px);}
+.btn-submit:disabled{background:var(--bg3);color:var(--muted);box-shadow:none;cursor:not-allowed;transform:none;}
+.btn-secondary{padding:7px 13px;border-radius:8px;border:1px solid var(--border);background:rgba(26,48,72,0.4);color:var(--muted);cursor:pointer;font-family:var(--mono);font-size:11px;transition:all 0.2s;}
+.btn-secondary:hover{border-color:var(--blue);color:var(--blue);}
+.btn-insights{padding:8px 17px;border-radius:8px;border:none;background:linear-gradient(135deg,#059669,var(--green));color:#fff;cursor:pointer;font-family:var(--sans);font-size:12px;font-weight:700;}
+.btn-insights:disabled{background:var(--bg3);color:var(--muted);cursor:not-allowed;}
+.alert-box{border-radius:9px;padding:11px 15px;margin-bottom:12px;font-size:13px;}
+.alert-box.err{background:rgba(127,29,29,0.15);border:1px solid var(--red);color:#fca5a5;}
+.alert-box.debug{background:var(--bg2);border:1px solid var(--border);color:var(--muted);font-size:11px;word-break:break-all;}
+.result-section{margin-top:26px;animation:slideUp 0.4s ease;}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.badge-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:15px;}
+.badge{padding:5px 13px;border-radius:20px;font-size:12px;font-weight:700;border:1px solid;display:inline-block;}
+.badge.mirata{border-color:var(--green);background:rgba(16,185,129,0.12);color:#6ee7b7;}
+.badge.empirica{border-color:var(--amber);background:rgba(245,158,11,0.12);color:#fcd34d;}
+.badge.indicated{border-color:var(--green);background:rgba(16,185,129,0.1);color:#86efac;}
+.badge.not-indicated{border-color:var(--red);background:rgba(239,68,68,0.1);color:#fca5a5;}
+.badge.access{border-color:var(--green);background:rgba(16,185,129,0.1);color:#86efac;}
+.badge.watch{border-color:var(--amber);background:rgba(245,158,11,0.1);color:#fcd34d;}
+.badge.reserve{border-color:var(--red);background:rgba(239,68,68,0.1);color:#fca5a5;}
+.therapy-card{border-radius:12px;padding:15px 17px;margin-bottom:10px;background:var(--bg2);border-left:3px solid;}
+.therapy-label{font-size:10px;font-weight:700;letter-spacing:3px;margin-bottom:10px;}
+.pills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(95px,1fr));gap:8px;}
+.pill-box{background:#f8fafc;border-radius:8px;padding:8px 10px;border:1px solid var(--border2);}
+.pill-label{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;}
+.pill-val{font-size:12px;font-weight:600;color:var(--text);}
+.pill-val.big{font-size:14px;font-weight:700;}
+.therapy-note{margin-top:9px;font-size:12px;color:var(--muted);border-top:1px solid var(--border2);padding-top:8px;line-height:1.6;}
+.res-block{border-radius:11px;padding:13px 16px;margin-bottom:10px;background:var(--bg2);border-left:3px solid;}
+.res-block-title{font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:8px;}
+.res-block-text{font-size:12px;line-height:1.7;}
+.res-list{list-style:none;}
+.res-list li{font-size:12px;color:var(--muted);margin-bottom:4px;padding-left:12px;position:relative;}
+.res-list li::before{content:"•";position:absolute;left:0;}
+.ref-item{background:#f8fafc;border-radius:8px;padding:10px 13px;border:1px solid var(--border2);margin-bottom:7px;display:flex;gap:10px;}
+.ref-num{min-width:22px;height:22px;border-radius:4px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--blue);font-weight:700;flex-shrink:0;}
+.ref-body{flex:1;}
+.ref-authors{font-size:11px;color:var(--muted);margin-bottom:2px;}
+.ref-title{font-size:12px;color:var(--text);line-height:1.5;font-style:italic;}
+.ref-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;align-items:center;}
+.ref-source{font-size:10px;color:var(--muted);}
+.ref-type{font-size:9px;font-weight:700;padding:1px 7px;border-radius:5px;}
+.ref-type.lg{background:rgba(14,165,233,0.15);color:var(--blue);border:1px solid rgba(14,165,233,0.3);}
+.ref-type.rct,.ref-type.meta{background:rgba(16,185,129,0.15);color:var(--green);border:1px solid rgba(16,185,129,0.3);}
+.ref-type.review{background:rgba(139,92,246,0.15);color:var(--purple);border:1px solid rgba(139,92,246,0.3);}
+.ref-link{font-size:10px;color:var(--blue);text-decoration:none;}
+.outcome-section{background:linear-gradient(135deg,#060f06,#0c1520);border:1px solid rgba(16,185,129,0.3);border-radius:14px;padding:17px 19px;margin-bottom:12px;}
+.btn-save{width:100%;padding:12px;border-radius:10px;border:none;background:linear-gradient(135deg,#059669,var(--green));color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--sans);}
+.btn-save:disabled{background:var(--bg3);color:var(--muted);cursor:not-allowed;}
+.saved-ok{padding:13px;background:rgba(16,185,129,0.1);border:1px solid var(--green);border-radius:8px;color:#86efac;font-size:13px;text-align:center;}
+.reg-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:13px 16px;margin-bottom:10px;}
+.reg-card.with-outcome{border-color:rgba(16,185,129,0.3);}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;}
+.stat-card{background:var(--bg2);border-radius:10px;padding:13px;text-align:center;}
+.stat-val{font-size:22px;font-weight:700;margin-bottom:3px;}
+.stat-val.small{font-size:13px;}
+.stat-lbl{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+.support-bar{background:linear-gradient(135deg,#0a1018,#0c1a28);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin-bottom:14px;text-align:center;}
+.support-bar h3{font-family:var(--sans);font-size:15px;color:var(--blue);margin-bottom:6px;}
+.support-bar p{font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.6;}
+.support-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.btn-bmc{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:10px;background:linear-gradient(135deg,#FFDD00,#FFB800);color:#000;font-family:var(--sans);font-size:13px;font-weight:700;text-decoration:none;transition:all 0.2s;}
+.btn-bmc:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,184,0,0.4);}
+.btn-paypal{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:10px;background:linear-gradient(135deg,#003087,#009cde);color:#fff;font-family:var(--sans);font-size:13px;font-weight:700;text-decoration:none;transition:all 0.2s;}
+.btn-paypal:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,156,222,0.4);}
+.feedback-section{background:linear-gradient(135deg,#0a0a1a,#0c1520);border:1px solid rgba(139,92,246,0.3);border-radius:14px;padding:18px 20px;margin-bottom:14px;}
+.feedback-section h3{font-family:var(--sans);font-size:14px;color:var(--purple);margin-bottom:6px;}
+.feedback-section p{font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.5;}
+.btn-feedback{width:100%;padding:12px;border-radius:10px;border:none;background:linear-gradient(135deg,#5b21b6,var(--purple));color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--sans);}
+.feedback-sent{padding:12px;background:rgba(139,92,246,0.1);border:1px solid var(--purple);border-radius:8px;color:#c4b5fd;font-size:13px;text-align:center;}
+.disclaimer{padding:9px 13px;background:var(--bg2);border-radius:8px;font-size:10px;color:var(--muted);line-height:1.6;margin-top:4px;}
+.dosage-alert{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.4);border-left:3px solid var(--red);border-radius:10px;padding:11px 15px;margin-bottom:12px;display:flex;align-items:flex-start;gap:10px;}
+.dosage-alert-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.dosage-alert-text{font-size:12px;color:#fca5a5;line-height:1.6;}
+.dosage-alert-text strong{color:var(--red);}
+.spinner{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:7px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.empty{text-align:center;padding:50px 20px;color:var(--muted);font-size:13px;border:1px dashed var(--border);border-radius:12px;line-height:1.9;}
+@media(max-width:600px){
+  .grid2,.grid3{grid-template-columns:1fr;}
+  .stat-grid{grid-template-columns:1fr 1fr;}
+  .therapy-modes,.severity-row{grid-template-columns:1fr 1fr;}
+  .pills-grid{grid-template-columns:1fr 1fr;}
+  .header{padding:13px 12px;}
+  .main{padding:14px 10px 60px;}
+  .support-btns{flex-direction:column;align-items:center;}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="logo">💊</div>
+      <div>
+        <div class="app-title">PediAbx Advisor</div>
+        <div class="app-sub">EVIDENCE-BASED PEDIATRIC ANTIBIOTIC &amp; ANTIFUNGAL PRESCRIBING · v4.1</div>
+        <div class="app-sub" style="margin-top:2px;">WHO AWaRe 2022 · ESPID · IDSA · AAP · WHO TB 2022 · ESCMID Fungal</div>
+        <div class="app-author">Designed and developed by Dr. Danilo Buonsenso — Fondazione Policlinico Universitario A. Gemelli IRCCS, Rome, Italy</div>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('form',this)">🔍 Prescription</button>
+      <button class="tab" onclick="showTab('registry',this)">📋 Case Registry</button>
+      <button class="tab" onclick="showTab('insights',this)">📊 Insights</button>
+      <button class="tab" onclick="showTab('support',this)">☕ Support</button>
+      <button class="tab" onclick="showTab('feedback',this)">💬 Feedback</button>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- TAB: FORM -->
+<div id="tab-form">
+
+  <div style="background:linear-gradient(135deg,#fef9c3,#fef3c7);border:1px solid #f59e0b;border-radius:12px;padding:13px 18px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+    <div>
+      <div style="font-size:12px;color:#92400e;font-weight:700;margin-bottom:2px;">☕ PediAbx Advisor is free for all clinicians worldwide</div>
+      <div style="font-size:11px;color:#78350f;">Designed by Dr. Danilo Buonsenso — Gemelli IRCCS, Rome · If useful, consider supporting its development</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-shrink:0;">
+      <a href="https://buymeacoffee.com/drdanilobuonsenso" target="_blank" rel="noreferrer" style="padding:8px 14px;border-radius:8px;background:linear-gradient(135deg,#FFDD00,#FFB800);color:#000;font-size:11px;font-weight:700;text-decoration:none;white-space:nowrap;">☕ Buy Me a Coffee</a>
+      <a href="https://paypal.me/danilobuonsenso" target="_blank" rel="noreferrer" style="padding:8px 14px;border-radius:8px;background:linear-gradient(135deg,#003087,#009cde);color:#fff;font-size:11px;font-weight:700;text-decoration:none;white-space:nowrap;">💙 PayPal</a>
+    </div>
+  </div>
+
+  <div class="card" style="border-color:rgba(14,165,233,0.2);">
+    <label class="lbl">Therapy mode</label>
+    <div class="therapy-modes">
+      <button class="mode-btn empirica active" id="modeEmpirica" onclick="setMode('empirica')">
+        <div class="mode-icon">🎯</div>
+        <span class="mode-label">EMPIRICAL</span>
+        <span class="mode-desc">Unknown pathogen — broad-spectrum</span>
+      </button>
+      <button class="mode-btn mirata" id="modeMirata" onclick="setMode('mirata')">
+        <div class="mode-icon">🧫</div>
+        <span class="mode-label">TARGETED</span>
+        <span class="mode-desc">Pathogen identified — antibiogram-guided</span>
+      </button>
+    </div>
+    <div id="mirataWarning" style="display:none;margin-top:10px;font-size:11px;color:var(--amber);background:rgba(245,158,11,0.08);padding:8px 12px;border-radius:6px;">
+      ⚠️ Add a positive microbiological result below to enable targeted therapy.
+    </div>
+  </div>
+
+  <div class="section-title">👤 Patient data</div>
+  <div class="grid3" style="margin-bottom:12px;">
+    <div class="card">
+      <label class="lbl">Age (months)</label>
+      <input type="number" id="ageMo" min="0" max="216" placeholder="e.g. 24" oninput="updateAge()"/>
+      <div id="ageYears" style="font-size:10px;color:var(--muted);margin-top:4px;"></div>
+    </div>
+    <div class="card">
+      <label class="lbl">Weight (kg)</label>
+      <input type="number" id="weight" min="1" max="120" placeholder="e.g. 12"/>
+    </div>
+    <div class="card">
+      <label class="lbl">Days of fever</label>
+      <input type="number" id="feverDays" min="0" placeholder="e.g. 3"/>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:12px;">
+    <label class="lbl">Infection type</label>
+    <select id="infection">
+      <option value="">-- select --</option>
+      <optgroup label="🫁 Upper respiratory tract">
+        <option>Acute otitis media</option><option>Recurrent acute otitis media</option>
+        <option>Acute bacterial sinusitis</option><option>Group A Streptococcal pharyngotonsillitis</option>
+        <option>Peritonsillar / retropharyngeal abscess</option>
+        <option>Bacterial laryngitis / Epiglottitis</option><option>Acute mastoiditis</option>
+      </optgroup>
+      <optgroup label="🫁 Lower respiratory tract">
+        <option>Acute bacterial bronchitis</option><option>Community-acquired pneumonia (CAP)</option>
+        <option>Atypical pneumonia (Mycoplasma/Chlamydia)</option>
+        <option>Hospital-acquired / ventilator-associated pneumonia (HAP/VAP)</option>
+        <option>Pleural effusion / Empyema</option><option>Lung abscess</option>
+      </optgroup>
+      <optgroup label="🫘 Urinary tract">
+        <option>Urinary tract infection (cystitis)</option><option>Pyelonephritis</option>
+        <option>Catheter-associated UTI (CAUTI)</option>
+      </optgroup>
+      <optgroup label="🫃 Abdominal">
+        <option>Bacterial gastroenteritis</option><option>Bacterial peritonitis</option>
+        <option>Complicated appendicitis</option><option>Clostridioides difficile infection</option>
+      </optgroup>
+      <optgroup label="🧠 CNS">
+        <option>Bacterial meningitis</option><option>Brain abscess</option>
+        <option>Ventriculitis / EVD-associated meningitis</option>
+      </optgroup>
+      <optgroup label="🩸 Sepsis / Bacteremia">
+        <option>Community-acquired sepsis / bacteremia</option><option>Nosocomial sepsis</option>
+        <option>CLABSI / CRBSI (vascular catheter infection)</option>
+        <option>Neonatal sepsis (early onset)</option><option>Neonatal sepsis (late onset)</option>
+      </optgroup>
+      <optgroup label="🦴 Bone / Joint">
+        <option>Septic arthritis</option><option>Acute osteomyelitis</option>
+        <option>Chronic / implant-associated osteomyelitis</option>
+      </optgroup>
+      <optgroup label="🩹 Skin / Soft tissue">
+        <option>Cellulitis / uncomplicated SSTI</option><option>Necrotizing fasciitis</option>
+        <option>Impetigo</option><option>Toxic shock syndrome</option>
+        <option>Burn wound infection</option><option>Staphylococcal scalded skin syndrome (SSSS)</option>
+      </optgroup>
+      <optgroup label="❤️ Cardiac">
+        <option>Bacterial endocarditis</option><option>Bacterial pericarditis</option>
+      </optgroup>
+      <optgroup label="🌍 Systemic / Special">
+        <option>Pertussis (whooping cough)</option><option>Brucellosis</option>
+        <option>Listeriosis</option><option>Scarlet fever</option>
+        <option>Bacterial lymphadenitis</option><option>Animal / human bite infection</option>
+        <option>Lyme disease</option><option>Rickettsiosis</option>
+      </optgroup>
+      <optgroup label="🦠 Tuberculosis / Mycobacteria">
+        <option>Pulmonary tuberculosis — drug susceptible</option>
+        <option>Pulmonary tuberculosis — drug resistant (MDR/XDR)</option>
+        <option>TB lymphadenitis</option><option>TB meningitis</option>
+        <option>TB osteomyelitis / Pott disease</option>
+        <option>Disseminated / miliary tuberculosis</option>
+        <option>Latent TB infection (LTBI) — treatment</option>
+        <option>Non-tuberculous mycobacteria (NTM)</option>
+      </optgroup>
+      <optgroup label="🍄 Fungal infections">
+        <option>Invasive candidiasis / candidemia</option>
+        <option>Candida UTI (funguria)</option>
+        <option>Oropharyngeal candidiasis (thrush)</option>
+        <option>Invasive aspergillosis</option>
+        <option>Pneumocystis jirovecii pneumonia (PCP)</option>
+        <option>Cryptococcal meningitis</option>
+        <option>Mucormycosis</option>
+        <option>Tinea capitis / corporis / pedis</option>
+        <option>Onychomycosis</option>
+        <option>Fungal endocarditis</option>
+      </optgroup>
+    </select>
+  </div>
+
+  <div class="card" style="margin-bottom:12px;">
+    <label class="lbl">Clinical severity</label>
+    <div class="severity-row">
+      <button class="sev-btn active" data-sev="mild" onclick="setSev('mild')">Mild</button>
+      <button class="sev-btn" data-sev="moderate" onclick="setSev('moderate')">Moderate</button>
+      <button class="sev-btn" data-sev="severe" onclick="setSev('severe')">Severe</button>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:12px;">
+    <label class="lbl">Antibiotic / antifungal allergies</label>
+    <select id="allergy">
+      <option>None</option><option>Penicillins (mild)</option><option>Penicillins (anaphylaxis)</option>
+      <option>Cephalosporins</option><option>Penicillins + Cephalosporins</option><option>Carbapenems</option>
+      <option>Macrolides</option><option>Sulfonamides (TMP-SMX)</option><option>Metronidazole</option>
+      <option>Fluoroquinolones</option><option>Aminoglycosides</option><option>Linezolid</option>
+      <option>Rifampin</option><option>Azoles (fluconazole / voriconazole)</option>
+      <option>Amphotericin B</option><option>Echinocandins</option>
+    </select>
+  </div>
+
+  <div class="card" style="margin-bottom:12px;">
+    <label class="lbl">Comorbidities</label>
+    <div class="chips" id="comorbChips"></div>
+  </div>
+
+  <div class="section-title">🏥 Clinical setting</div>
+  <div class="grid2" style="margin-bottom:12px;" id="flagsGrid"></div>
+
+  <div class="section-title">🩺 Catheters and devices</div>
+  <div class="card" style="margin-bottom:12px;">
+    <div class="chips" id="catheterChips"></div>
+    <div id="clabsiFlag" style="display:none;margin-top:10px;"></div>
+  </div>
+
+  <div class="section-title">🔥 Burns</div>
+  <div class="card" style="margin-bottom:12px;">
+    <div class="chips" id="burnChips"></div>
+    <div id="burnInfFlag" style="display:none;margin-top:10px;"></div>
+  </div>
+
+  <div class="section-title">🧫 Microbiological data</div>
+  <div class="card" style="margin-bottom:12px;">
+    <div class="grid2" style="margin-bottom:10px;">
+      <div>
+        <label class="lbl">Sample site</label>
+        <select id="mSite">
+          <option value="">-- select --</option>
+          <option>Blood (blood culture)</option><option>Cerebrospinal fluid (CSF)</option>
+          <option>Urine (urine culture)</option><option>BAL / tracheal aspirate</option>
+          <option>Throat swab</option><option>Nasal swab</option>
+          <option>Wound / burn swab</option><option>Pleural fluid</option>
+          <option>Joint fluid</option><option>Bone biopsy</option>
+          <option>Stool culture</option><option>Catheter tip</option>
+          <option>Peritoneal fluid</option><option>Abscess drainage</option>
+          <option>Bronchoalveolar lavage (BAL) — fungal</option>
+          <option>Serum galactomannan / beta-D-glucan</option>
+          <option>GeneXpert / Xpert MTB-RIF</option>
+          <option>IGRA / Mantoux</option>
+          <option>Sputum AFB smear / culture</option>
+        </select>
+      </div>
+      <div>
+        <label class="lbl">Result</label>
+        <select id="mResult">
+          <option value="positive">Positive</option>
+          <option value="negative">Negative</option>
+          <option value="pending">Pending</option>
+        </select>
+      </div>
+      <div>
+        <label class="lbl">Organism / finding</label>
+        <input type="text" id="mOrganism" placeholder="e.g. C. albicans, A. fumigatus, MTB, MRSA..."/>
+      </div>
+      <div>
+        <label class="lbl">Susceptibility / MIC</label>
+        <input type="text" id="mAbg" placeholder="e.g. S fluconazole, R isoniazid, pan-S..."/>
+      </div>
+    </div>
+    <button class="btn-secondary" onclick="addMicrobio()">+ Add sample</button>
+    <div id="microEntries"></div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px;">
+    <label class="lbl">Additional clinical notes</label>
+    <textarea id="notes" rows="3" placeholder="1-2 sentences max. Only add critical info not already covered above. E.g. CRP 145, PCT 12, IGRA positive, endemic country. Do NOT repeat the diagnosis or findings already selected (e.g. no need to describe pneumonia signs if you already selected CAP above)."></textarea>
+  </div>
+
+  <div id="errorBox" class="alert-box err" style="display:none;"></div>
+  <div id="debugBox" class="alert-box debug" style="display:none;"><strong>DEBUG: </strong><span id="debugText"></span></div>
+
+  <button class="btn-submit" id="submitBtn" onclick="handleSubmit()">
+    🔍 GENERATE EVIDENCE-BASED RECOMMENDATION
+  </button>
+
+  <div id="resultSection" style="display:none;" class="result-section"></div>
+</div>
+
+<!-- TAB: REGISTRY -->
+<div id="tab-registry" style="display:none;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+    <h2 style="font-family:var(--sans);font-size:17px;color:var(--blue);">📋 Case Registry</h2>
+    <div style="display:flex;gap:8px;">
+      <button class="btn-secondary" onclick="loadRegistry()">⟳ Refresh</button>
+      <button class="btn-secondary" onclick="exportCSV()" style="border-color:#10b981;color:#10b981;">⬇ Export CSV</button>
+      <button class="btn-insights" onclick="showTab('insights',null);generateInsights();">📊 Insights</button>
+    </div>
+  </div>
+  <div id="registryList"><div class="empty">No cases yet. Generate a recommendation and save the outcome to begin.</div></div>
+</div>
+
+<!-- TAB: INSIGHTS -->
+<div id="tab-insights" style="display:none;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+    <h2 style="font-family:var(--sans);font-size:17px;color:var(--blue);">📊 Real-World Insights</h2>
+    <button class="btn-insights" id="insightsBtn" onclick="generateInsights()">🔄 Generate / Refresh</button>
+  </div>
+  <div id="insightsContent"><div class="empty">Click "Generate" to analyse cases with documented outcomes.</div></div>
+</div>
+
+<!-- TAB: SUPPORT -->
+<div id="tab-support" style="display:none;">
+  <div class="support-bar">
+    <h3>☕ Support this project</h3>
+    <p>PediAbx Advisor is free and open to all clinicians worldwide.<br>
+    If you find it useful in your practice, consider supporting its development and maintenance.<br>
+    Your contribution helps keep it free, updated and evidence-based.</p>
+    <div class="support-btns">
+      <a class="btn-bmc" href="https://buymeacoffee.com/drdanilobuonsenso" target="_blank" rel="noreferrer">☕ Buy Me a Coffee</a>
+      <a class="btn-paypal" href="https://paypal.me/danilobuonsenso" target="_blank" rel="noreferrer">💙 Donate via PayPal</a>
+    </div>
+    <div style="margin-top:20px;padding:16px;background:var(--bg3);border-radius:10px;border:1px solid var(--border);">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px;letter-spacing:1px;">OR SEARCH <strong style="color:var(--blue);">Danilo Buonsenso</strong> ON PAYPAL</div>
+    </div>
+  </div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px 20px;">
+    <div style="font-family:var(--sans);font-size:14px;color:var(--blue);margin-bottom:10px;">About</div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.8;">
+      <strong style="color:var(--text);">PediAbx Advisor</strong> was designed and developed by<br>
+      <strong style="color:var(--blue);">Dr. Danilo Buonsenso, MD PhD</strong><br>
+      Pediatrician and Clinical Researcher<br>
+      Fondazione Policlinico Universitario A. Gemelli IRCCS<br>
+      Universita Cattolica del Sacro Cuore, Rome, Italy<br><br>
+      Guidelines integrated: WHO AWaRe Antibiotic Book 2022 · WHO Paediatric TB Guidelines 2022 ·
+      ESPID · ESCMID · IDSA · AAP Red Book · NICE · Nelson's Pediatric Antimicrobial Therapy ·
+      Surviving Sepsis Campaign Pediatric 2020 · ESCMID/ECMM Fungal Guidelines · ABA Burn Infection Guidelines
+    </div>
+  </div>
+</div>
+
+<!-- TAB: FEEDBACK -->
+<div id="tab-feedback" style="display:none;">
+  <div class="feedback-section">
+    <h3>💬 Leave your feedback</h3>
+    <p>Help improve PediAbx Advisor. Your suggestions, bug reports and clinical experience are invaluable.</p>
+    <div id="feedbackForm">
+      <div style="margin-bottom:10px;">
+        <label class="lbl">Your role</label>
+        <select id="fb_role">
+          <option value="">-- select --</option>
+          <option>Pediatrician</option><option>Pediatric infectious disease specialist</option>
+          <option>General practitioner</option><option>Emergency physician</option>
+          <option>Intensivist</option><option>Pharmacist</option><option>Medical student / resident</option><option>Other</option>
+        </select>
+      </div>
+      <div style="margin-bottom:10px;">
+        <label class="lbl">Country</label>
+        <input type="text" id="fb_country" placeholder="e.g. Italy, USA, UK..."/>
+      </div>
+      <div style="margin-bottom:10px;">
+        <label class="lbl">Feedback type</label>
+        <select id="fb_type">
+          <option value="">-- select --</option>
+          <option>Clinical suggestion / improvement</option>
+          <option>Missing infection or drug</option>
+          <option>Guideline discordance found</option>
+          <option>Bug / technical issue</option>
+          <option>General comment</option>
+          <option>Request new feature</option>
+        </select>
+      </div>
+      <div style="margin-bottom:10px;">
+        <label class="lbl">Your feedback</label>
+        <textarea id="fb_text" rows="5" placeholder="Describe your suggestion, clinical observation, or bug in detail..."></textarea>
+      </div>
+      <div style="margin-bottom:14px;">
+        <label class="lbl">Email (optional)</label>
+        <input type="email" id="fb_email" placeholder="your@email.com"/>
+      </div>
+      <button class="btn-feedback" onclick="submitFeedback()">📤 SEND FEEDBACK</button>
+    </div>
+    <div id="feedbackSent" style="display:none;" class="feedback-sent">✅ Thank you! Feedback will be reviewed by Dr. Buonsenso.</div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const state={therapyMode:'empirica',severity:'mild',comorbidities:[],
+  flags:{prior_abx:false,hospitalized:false,icu_current:false,icu_recent:false},
+  catheters:[],clabsi:false,burns:[],burnInfected:false,microEntries:[],currentCaseId:null};
+
+const COMORBIDITIES=['Primary immunodeficiency','Drug-induced immunosuppression','Febrile neutropenia','Solid organ transplant','Bone marrow / HSCT','Cystic fibrosis','Asplenia','Congenital heart disease','Prematurity / low birth weight','Severe malnutrition','Chronic renal failure','Hepatic failure','Diabetes mellitus','HIV/AIDS','Biologics (anti-TNF, rituximab etc.)','Recent hospitalization <3 months','Antibiotics in last 3 months','Sickle cell disease','Neuromuscular disease','Bronchopulmonary dysplasia','Chronic granulomatous disease','DiGeorge syndrome'];
+const CATHETERS=['CVC (central venous catheter)','PICC','Port-a-cath','Arterial catheter','Peritoneal catheter','Urinary catheter (Foley)','External ventricular drain (EVD)','Epidural catheter'];
+const BURNS=['1st degree <10% BSA','2nd degree superficial','2nd degree deep','3rd degree','>20% BSA','Critical >40% BSA','Facial / inhalation burn'];
+const FLAGS=[{key:'prior_abx',label:'Antibiotics in last 3 months',icon:'💊'},{key:'hospitalized',label:'Currently hospitalized',icon:'🏥'},{key:'icu_current',label:'Currently in ICU / PICU',icon:'🔴'},{key:'icu_recent',label:'ICU stay in last 3 months',icon:'🟠'}];
+const OUTCOMES=['Full recovery','Recovery with sequelae','Antibiotic change (treatment failure)','Adverse effects / toxicity','Hospitalization required','Death','Lost to follow-up'];
+
+function init(){
+  buildChips('comorbChips',COMORBIDITIES,'comorbidities','active-blue');
+  buildChips('catheterChips',CATHETERS,'catheters','active-amber');
+  buildChips('burnChips',BURNS,'burns','active-red');
+  const fg=document.getElementById('flagsGrid');
+  FLAGS.forEach(f=>{
+    const d=document.createElement('div');d.className='flag-card';d.id='flag_'+f.key;
+    d.innerHTML='<div class="flag-check" id="chk_'+f.key+'"></div><span class="flag-label">'+f.icon+' '+f.label+'</span>';
+    d.onclick=()=>toggleFlag(f.key);fg.appendChild(d);
+  });
+  document.getElementById('clabsiFlag').innerHTML=buildFlagHTML('clabsi','🚨 CLABSI / CRBSI suspected or confirmed');
+  document.getElementById('burnInfFlag').innerHTML=buildFlagHTML('burnInf','🦠 Clinical signs of burn wound infection');
+  loadRegistry();
+}
+
+function buildFlagHTML(id,label){
+  return '<div class="flag-card" id="flagcard_'+id+'" onclick="toggleSpecialFlag(\''+id+'\')"><div class="flag-check" id="chk_'+id+'"></div><span class="flag-label">'+label+'</span></div>';
+}
+function buildChips(cid,items,key,cls){
+  const c=document.getElementById(cid);
+  items.forEach(item=>{
+    const b=document.createElement('button');b.className='chip';b.textContent=item;
+    b.onclick=()=>{
+      const arr=state[key];const idx=arr.indexOf(item);
+      if(idx>-1){arr.splice(idx,1);b.className='chip';}else{arr.push(item);b.className='chip '+cls;}
+      if(key==='catheters')document.getElementById('clabsiFlag').style.display=arr.length?'block':'none';
+      if(key==='burns')document.getElementById('burnInfFlag').style.display=arr.length?'block':'none';
+      checkMirata();
+    };
+    c.appendChild(b);
+  });
+}
+
+function showTab(name,el){
+  ['form','registry','insights','support','feedback'].forEach(t=>{
+    const e=document.getElementById('tab-'+t);if(e)e.style.display=t===name?'block':'none';
+  });
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  if(el)el.classList.add('active');
+  else{const tabs=['form','registry','insights','support','feedback'];document.querySelectorAll('.tab').forEach((b,i)=>{if(tabs[i]===name)b.classList.add('active');});}
+  if(name==='registry')loadRegistry();
+  trackEvent('tab_view',{tab_name:name});
+}
+
+function setMode(m){
+  state.therapyMode=m;
+  document.getElementById('modeEmpirica').className='mode-btn empirica'+(m==='empirica'?' active':'');
+  document.getElementById('modeMirata').className='mode-btn mirata'+(m==='mirata'?' active':'');
+  checkMirata();
+}
+function checkMirata(){
+  const hasPos=state.microEntries.some(e=>e.result==='positive'&&e.organism);
+  document.getElementById('mirataWarning').style.display=(state.therapyMode==='mirata'&&!hasPos)?'block':'none';
+}
+function setSev(s){state.severity=s;document.querySelectorAll('.sev-btn').forEach(b=>b.classList.toggle('active',b.dataset.sev===s));}
+function toggleFlag(key){
+  state.flags[key]=!state.flags[key];
+  document.getElementById('flag_'+key).classList.toggle('on',state.flags[key]);
+  document.getElementById('chk_'+key).textContent=state.flags[key]?'v':'';
+}
+function toggleSpecialFlag(id){
+  if(id==='clabsi')state.clabsi=!state.clabsi;
+  if(id==='burnInf')state.burnInfected=!state.burnInfected;
+  const val=id==='clabsi'?state.clabsi:state.burnInfected;
+  document.getElementById('flagcard_'+id).classList.toggle('on',val);
+  document.getElementById('chk_'+id).textContent=val?'v':'';
+}
+function updateAge(){const v=document.getElementById('ageMo').value;document.getElementById('ageYears').textContent=v?'= '+(v/12).toFixed(1)+' years':'';}
+
+function addMicrobio(){
+  const site=document.getElementById('mSite').value;
+  const org=document.getElementById('mOrganism').value.trim();
+  if(!site||!org)return;
+  const entry={site,organism:org,result:document.getElementById('mResult').value,abg:document.getElementById('mAbg').value.trim()};
+  state.microEntries.push(entry);
+  document.getElementById('mSite').value='';document.getElementById('mOrganism').value='';document.getElementById('mAbg').value='';
+  renderMicroEntries();
+  if(entry.result==='positive')setMode('mirata');
+  checkMirata();
+}
+function removeMicrobio(i){state.microEntries.splice(i,1);renderMicroEntries();checkMirata();}
+function renderMicroEntries(){
+  const c=document.getElementById('microEntries');
+  c.innerHTML=state.microEntries.map((e,i)=>
+    '<div class="micro-entry"><div>'+
+    '<span style="font-size:12px;color:var(--blue);font-weight:700;">'+e.site+'</span>'+
+    '<span style="font-size:12px;color:var(--muted);margin:0 6px;">→</span>'+
+    '<span class="micro-badge '+(e.result==='positive'?'pos':e.result==='negative'?'neg':'wait')+'">'+e.result.toUpperCase()+'</span>'+
+    '<span style="font-size:12px;color:#94a3b8;margin-left:7px;">'+e.organism+'</span>'+
+    (e.abg?'<span style="font-size:11px;color:var(--muted);margin-left:7px;">| '+e.abg+'</span>':'')+
+    '</div><button class="btn-remove" onclick="removeMicrobio('+i+')">×</button></div>'
+  ).join('');
+}
+
+function buildPrompt(){
+  const ageMo=document.getElementById('ageMo').value;
+  const weight=document.getElementById('weight').value;
+  const infection=document.getElementById('infection').value;
+  const allergy=document.getElementById('allergy').value;
+  const notes=document.getElementById('notes').value.trim();
+  const feverDays=document.getElementById('feverDays').value;
+  const ageY=ageMo?(ageMo/12).toFixed(1):'';
+  const isTB=infection.toLowerCase().includes('tubercul')||infection.toLowerCase().includes('ltbi')||infection.toLowerCase().includes('ntm')||infection.toLowerCase().includes('mycobact');
+  const isFungal=infection.toLowerCase().includes('candid')||infection.toLowerCase().includes('aspergil')||infection.toLowerCase().includes('pneumocystis')||infection.toLowerCase().includes('cryptococ')||infection.toLowerCase().includes('mucor')||infection.toLowerCase().includes('tinea')||infection.toLowerCase().includes('fungal')||infection.toLowerCase().includes('onychom');
+  const hasMicrobioPos=state.microEntries.some(e=>e.result==='positive'&&e.organism);
+  const isTargeted=state.therapyMode==='mirata'&&hasMicrobioPos;
+  const microText=state.microEntries.length?state.microEntries.map(e=>'Site:'+e.site+' Result:'+e.result+' Organism:'+e.organism+(e.abg?' Susceptibility:'+e.abg:'')).join('; '):'none';
+  const catText=state.catheters.length?state.catheters.join(', ')+(state.clabsi?' [CLABSI suspected]':''):'none';
+  const burnText=state.burns.length?state.burns.join(', ')+(state.burnInfected?' [infected]':''):'none';
+  const comorb=state.comorbidities.join(', ')||'none';
+  const modeLabel=isTargeted?'TARGETED THERAPY':'EMPIRICAL THERAPY';
+  const modeInstr=isTargeted?'Patient has microbiological data with identified organism. Adapt therapy to available susceptibility results. Explain microbiological reasoning in detail.':'No organism identified. Provide empirical coverage based on epidemiology, local resistance patterns and patient risk factors.';
+  let lgLine='Guidelines: WHO AWaRe Antibiotic Book 2022, ESPID, ESCMID, ESICM, IDSA (CLABSI/VAP/SSTI/osteomyelitis/endocarditis), AAP Red Book, NICE, Nelsons Pediatric Antimicrobial Therapy, Surviving Sepsis Campaign Pediatric 2020, ABA burn infection guidelines, ECDC AMR.';
+  if(isTB)lgLine='Guidelines: WHO Treatment of drug-susceptible tuberculosis 2022, WHO Guidance for national TB programmes on management of TB in children and adolescents 2022, WHO consolidated guidelines on TB 2022 (drug-resistant TB), ERS/ECDC guidelines on TB, Stop TB Partnership, AAP Red Book TB chapter, ESPID TB guidelines. Include complete HRZE paediatric regimen with WHO weight-band dosing, TB-MDR second-line options if applicable, LTBI treatment options (3HP, 1HP, 6H, 4R).';
+  if(isFungal)lgLine='Guidelines: ESCMID/ECMM/ERS guidelines for fungal infections, IDSA guidelines (candidiasis 2016, aspergillosis 2016, cryptococcosis, PCP), ESPID fungal infection guidelines, AAP Red Book fungal chapters, Paediatric Infectious Disease Society antifungal guidelines. Use weight-based paediatric dosing. Consider TDM for azoles in children.';
+  return [
+    'You are a senior consultant in pediatric infectious diseases. Provide a complete evidence-based treatment recommendation.',
+    '',
+    'DOSING REQUIREMENT: Use ONLY WHO AWaRe Antibiotic Book 2022 paediatric weight-band doses. Dose field format: Xmg/kg/day divided qXh (max Xg/day). Notes field: include calculated mg per dose and total daily mg for this patient. Example for amoxicillin 12kg child: dose=90mg/kg/day div q12h (max 3g/day), notes=540mg per dose, 1080mg/day total.',
+    '',
+    'MODE: '+modeLabel,
+    modeInstr,
+    '',
+    'PATIENT:',
+    'Age: '+ageMo+' months ('+ageY+' years), Weight: '+weight+' kg',
+    'Infection: '+infection,
+    'Severity: '+state.severity,
+    'Allergies: '+allergy,
+    'Comorbidities: '+comorb,
+    'Fever duration: '+(feverDays||'unknown')+' days',
+    'Recent antibiotics: '+(state.flags.prior_abx?'yes':'no'),
+    'Setting: '+(state.flags.hospitalized?'hospitalized':'outpatient'),
+    'Currently in ICU: '+(state.flags.icu_current?'YES':'no'),
+    'Recent ICU stay <3m: '+(state.flags.icu_recent?'YES':'no'),
+    'Catheters/devices: '+catText,
+    'Burns: '+burnText,
+    'Microbiology: '+microText,
+    'Notes: '+(notes||'none'),
+    '',
+    lgLine,
+    '',
+    'Reply with ONLY a valid JSON object. Zero text before or after. Zero markdown.',
+    'Required JSON fields:',
+    'antibiotic_indicated (boolean)',
+    'therapy_mode (empirical or targeted)',
+    'no_antibiotic_reason (string or null)',
+    'AWaRe_category (Access or Watch or Reserve or N/A for antifungals/TB)',
+    'microbiology_interpretation (string)',
+    'first_choice (object: drug route dose frequency duration notes)',
+    'second_choice (object: drug route dose frequency duration notes)',
+    'third_choice_severe (object or null: drug route dose frequency duration notes)',
+    'tb_regimen (string with full HRZE scheme or null)',
+    'catheter_management (string or null)',
+    'burn_management (string or null)',
+    'de_escalation (string)',
+    'hospitalization_criteria (array of strings)',
+    'recommended_tests (array of strings)',
+    'followup (string)',
+    'alerts (array of strings)',
+    'stewardship_note (string)',
+    'references (array of 4 objects: authors title source year doi_or_url type)',
+    'guidelines_used (array of strings)',
+  ].join('\n');
+}
+
+async function handleSubmit(){
+  const ageMo=document.getElementById('ageMo').value;
+  const weight=document.getElementById('weight').value;
+  const infection=document.getElementById('infection').value;
+  if(!ageMo||!weight||!infection){showError('Please enter age, weight and infection type.');return;}
+  hideError();hideDebug();
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Analysing — consulting guidelines...';
+  document.getElementById('resultSection').style.display='none';
+  trackEvent('recommendation_generated',{infection:infection,severity:state.severity,mode:state.therapyMode});
+  try{
+    const resp=await fetch('https://pediabx-backend.thekookbitcoiner.workers.dev',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({system:'Reply ONLY with valid JSON. No text before or after. No markdown.',messages:[{role:'user',content:buildPrompt()}],max_tokens:4096}),
+    });
+    const respText=await resp.text();
+    showDebug('HTTP '+resp.status+' | len:'+respText.length+' | '+respText.substring(0,80));
+    if(!resp.ok){showError('HTTP error '+resp.status+'. See debug.');return;}
+    let data;
+    try{data=JSON.parse(respText);}catch(e){showError('Response is not JSON. See debug.');return;}
+    if(data.error){showError('API error: '+(data.error.message||JSON.stringify(data.error)));return;}
+    if(data.stop_reason==='max_tokens'){showError('Response truncated. Please try again.');return;}
+    const rawBlock=(data.content||[]).find(b=>b.type==='text');
+    if(!rawBlock){showError('No text in response.');return;}
+    const txt=rawBlock.text.replace(/```json/g,'').replace(/```/g,'').trim();
+    const j0=txt.indexOf('{'),j1=txt.lastIndexOf('}');
+    if(j0===-1||j1===-1){showError('JSON not found in response.');showDebug('RAW: '+txt.substring(0,200));return;}
+    let parsed;
+    try{parsed=JSON.parse(txt.substring(j0,j1+1));}
+    catch(pe){showError('Malformed JSON: '+pe.message);return;}
+    hideDebug();
+    renderResult(parsed);
+    saveCaseToStorage(parsed);
+  }catch(e){
+    showDebug('Exception: '+e.name+': '+e.message);
+    showError('Network error: '+e.message);
+  }finally{
+    btn.disabled=false;btn.innerHTML='🔍 GENERATE EVIDENCE-BASED RECOMMENDATION';
+  }
+}
+
+function renderResult(r){
+  const isMirata=(r.therapy_mode||'').includes('target')||(r.therapy_mode||'').includes('mirata');
+  const modeClass=isMirata?'mirata':'empirica';
+  const modeLabel=isMirata?'🧫 TARGETED THERAPY':'🎯 EMPIRICAL THERAPY';
+  const aw=(r.AWaRe_category||'').toLowerCase();
+  const awareClass=aw.includes('access')?'access':aw.includes('watch')?'watch':aw.includes('reserve')?'reserve':'';
+  let html='<div class="badge-row">';
+  html+='<span class="badge '+modeClass+'">'+modeLabel+'</span>';
+  if(r.AWaRe_category)html+='<span class="badge '+awareClass+'">WHO AWaRe: '+r.AWaRe_category+'</span>';
+  html+='<span class="badge '+(r.antibiotic_indicated?'indicated':'not-indicated')+'">'+(r.antibiotic_indicated?'Indicated':'NOT indicated')+'</span>';
+  html+='</div>';
+
+  // DOSAGE ALERT — always visible
+  html+='<div class="dosage-alert">';
+  html+='<div class="dosage-alert-icon">⚠️</div>';
+  html+='<div class="dosage-alert-text"><strong>Always verify dosages independently.</strong> Doses shown are AI-generated based on standard guidelines and patient weight. Always cross-check with your local formulary, Nelson\'s Antimicrobial Therapy, BNF for Children, or a clinical pharmacist — especially for neonates, renal/hepatic impairment, and critically ill patients.</div>';
+  html+='</div>';
+
+  if(!r.antibiotic_indicated&&r.no_antibiotic_reason)html+='<div class="res-block" style="border-color:var(--red);"><div class="res-block-text" style="color:#fca5a5;">'+escHtml(r.no_antibiotic_reason)+'</div></div>';
+  if(r.microbiology_interpretation)html+=resBlock('#8b5cf6','MICROBIOLOGY INTERPRETATION','<span style="color:#c4b5fd;">'+escHtml(r.microbiology_interpretation)+'</span>');
+  if(r.tb_regimen)html+=resBlock('var(--amber)','TB / NTM TREATMENT REGIMEN','<span style="color:#fcd34d;white-space:pre-wrap;">'+escHtml(r.tb_regimen)+'</span>');
+  if(r.antibiotic_indicated){
+    const choices=[
+      {data:r.first_choice,label:'1ST CHOICE',color:'var(--green)'},
+      {data:r.second_choice,label:'2ND CHOICE',color:'var(--amber)'},
+      {data:r.third_choice_severe&&r.third_choice_severe.drug?r.third_choice_severe:null,label:'3RD CHOICE — MDR/ICU/Immunocompromised',color:'var(--red)'},
+    ].filter(c=>c.data);
+    choices.forEach(c=>{
+      const drug=c.data.drug||c.data.farmaco||'';
+      const route=c.data.route||c.data.via||'';
+      const freq=c.data.frequency||c.data.frequenza||'';
+      const dur=c.data.duration||c.data.durata||'';
+      const note=c.data.notes||c.data.note||'';
+      html+='<div class="therapy-card" style="border-color:'+c.color+';border-left-color:'+c.color+';">';
+      html+='<div class="therapy-label" style="color:'+c.color+';">'+c.label+'</div>';
+      html+='<div class="pills-grid">';
+      html+=pill('Drug',drug);html+=pill('Route',route);
+      html+=pill('Dose',c.data.dose);html+=pill('Frequency',freq);
+      html+='<div class="pill-box"><div class="pill-label">DURATION</div><div class="pill-val big" style="color:'+c.color+';">'+(dur||'—')+'</div></div>';
+      html+='</div>';
+      if(note)html+='<div class="therapy-note">'+escHtml(note)+'</div>';
+      html+='</div>';
+    });
+  }
+  if(r.catheter_management)html+=resBlock('var(--amber)','CATHETER / CLABSI MANAGEMENT','<span style="color:#fcd34d;">'+escHtml(r.catheter_management)+'</span>');
+  if(r.burn_management)html+=resBlock('var(--red)','BURN WOUND INFECTION MANAGEMENT','<span style="color:#fca5a5;">'+escHtml(r.burn_management)+'</span>');
+  if(r.alerts&&r.alerts.length){html+='<div class="res-block" style="background:#1c1200;border-left-color:#f59e0b;"><div class="res-block-title" style="color:#f59e0b;">CLINICAL ALERTS</div><ul class="res-list">'+r.alerts.map(a=>'<li style="color:#fde68a;">'+escHtml(a)+'</li>').join('')+'</ul></div>';}
+  if(r.de_escalation)html+='<div class="res-block" style="background:#0f2318;border-left-color:#22c55e;"><div class="res-block-title" style="color:#22c55e;">DE-ESCALATION STRATEGY</div><div class="res-block-text" style="color:#e2f5e9;">'+escHtml(r.de_escalation)+'</div></div>';
+  if(r.hospitalization_criteria&&r.hospitalization_criteria.length)html+=resBlock('var(--blue)','HOSPITALIZATION CRITERIA','<ul class="res-list">'+r.hospitalization_criteria.map(c=>'<li>'+escHtml(c)+'</li>').join('')+'</ul>');
+  html+='<div class="grid2" style="margin-bottom:10px;">';
+  if(r.recommended_tests&&r.recommended_tests.length)html+='<div class="res-block" style="border-left-color:var(--blue);margin:0;"><div class="res-block-title" style="color:var(--blue);">RECOMMENDED TESTS</div><ul class="res-list">'+r.recommended_tests.map(e=>'<li>'+escHtml(e)+'</li>').join('')+'</ul></div>';
+  if(r.followup)html+='<div class="res-block" style="border-left-color:var(--blue);margin:0;"><div class="res-block-title" style="color:var(--blue);">FOLLOW-UP</div><div class="res-block-text" style="color:var(--muted);">'+escHtml(r.followup)+'</div></div>';
+  html+='</div>';
+  if(r.stewardship_note)html+='<div class="res-block" style="background:#0f2318;border-left-color:#22c55e;"><div class="res-block-title" style="color:#22c55e;">ANTIBIOTIC STEWARDSHIP</div><div class="res-block-text" style="color:#e2f5e9;">'+escHtml(r.stewardship_note)+'</div></div>';
+  if(r.references&&r.references.length){
+    html+='<div class="res-block" style="border-left-color:var(--blue);"><div class="res-block-title" style="color:var(--blue);">BIBLIOGRAPHIC REFERENCES</div>';
+    r.references.forEach((ref,i)=>{
+      const tc=(ref.type||'').toLowerCase();
+      const typeClass=tc.includes('meta')||tc.includes('rct')?'rct':tc.includes('review')?'review':'lg';
+      const src=ref.source||ref.rivista_o_fonte||'';const yr=ref.year||ref.anno||'';
+      const url=ref.doi_or_url||ref.doi_o_url||'';
+      html+='<div class="ref-item"><div class="ref-num">'+(i+1)+'</div><div class="ref-body">';
+      if(ref.authors)html+='<div class="ref-authors">'+escHtml(ref.authors)+'</div>';
+      html+='<div class="ref-title">'+escHtml(ref.title||ref.titolo||'')+'</div>';
+      html+='<div class="ref-meta">';
+      if(src)html+='<span class="ref-source">'+escHtml(src)+(yr?', '+yr:'')+'</span>';
+      if(ref.type)html+='<span class="ref-type '+typeClass+'">'+escHtml(ref.type)+'</span>';
+      if(url)html+='<a class="ref-link" href="'+url+'" target="_blank" rel="noreferrer">link</a>';
+      html+='</div></div></div>';
+    });
+    html+='<div style="font-size:10px;color:var(--muted);margin-top:8px;">Please verify all references independently before academic or clinical use.</div></div>';
+  }
+  html+=outcomeFormHTML();
+  // New patient button
+  html+='<div style="margin-bottom:12px;">';
+  html+='<button onclick="resetForm()" style="width:100%;padding:14px;border-radius:12px;border:2px solid var(--blue);background:rgba(3,105,161,0.06);color:var(--blue);font-size:14px;font-weight:700;cursor:pointer;font-family:var(--sans);transition:all 0.2s;">+ NEW PATIENT</button>';
+  html+='</div>';
+
+  html+='<div style="background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">';
+  html+='<div style="font-size:12px;color:var(--muted);">Found this useful? <span style="color:var(--text);">Help keep it free and updated.</span></div>';
+  html+='<div style="display:flex;gap:8px;flex-wrap:wrap;">';
+  html+='<a href="https://buymeacoffee.com/drdanilobuonsenso" target="_blank" style="padding:7px 14px;border-radius:8px;background:linear-gradient(135deg,#FFDD00,#FFB800);color:#000;font-size:11px;font-weight:700;text-decoration:none;">☕ Coffee</a>';
+  html+='<button onclick="showTab(\'feedback\',null)" style="padding:7px 14px;border-radius:8px;border:1px solid var(--purple);background:rgba(139,92,246,0.1);color:var(--purple);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--mono);">💬 Feedback</button>';
+  html+='</div></div>';
+  html+='<div class="disclaimer">⚕️ Clinical decision support tool. Does not replace physician judgment. Always verify dosing by weight, renal/hepatic function and drug interactions. Dosages must be independently verified against your local formulary.</div>';
+  const sec=document.getElementById('resultSection');
+  sec.innerHTML=html;sec.style.display='block';
+  sec.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function pill(label,value){return '<div class="pill-box"><div class="pill-label">'+label+'</div><div class="pill-val">'+(value||'—')+'</div></div>';}
+function resBlock(color,title,content){return '<div class="res-block" style="border-left-color:'+color+';margin-bottom:10px;"><div class="res-block-title" style="color:'+color+';">'+title+'</div>'+content+'</div>';}
+function escHtml(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function outcomeFormHTML(){
+  return '<div class="outcome-section"><div class="res-block-title" style="color:var(--green);margin-bottom:8px;">DOCUMENT CASE OUTCOME</div>'+
+    '<p style="font-size:11px;color:var(--muted);margin-bottom:14px;">Your feedback builds the real-world registry and improves future recommendations.</p>'+
+    '<div class="grid2" style="margin-bottom:10px;">'+
+    '<div><label class="lbl">Drug actually used</label><input type="text" id="oc_abx" placeholder="e.g. amoxicillin, fluconazole..."/></div>'+
+    '<div><label class="lbl">Actual duration (days)</label><input type="number" id="oc_dur"/></div>'+
+    '<div><label class="lbl">Clinical outcome</label><select id="oc_out"><option value="">-- select --</option>'+OUTCOMES.map(o=>'<option>'+o+'</option>').join('')+'</select></div>'+
+    '<div><label class="lbl">Days to recovery</label><input type="number" id="oc_days"/></div>'+
+    '</div>'+
+    '<div style="margin-bottom:10px;"><label class="lbl">Complications</label><input type="text" id="oc_comp" placeholder="e.g. rash, relapse, C. diff, hepatotoxicity..."/></div>'+
+    '<div style="margin-bottom:12px;"><label class="lbl">Physician notes</label><textarea id="oc_notes" rows="3" placeholder="Clinical observations, guideline discordances, unexpected findings..."></textarea></div>'+
+    '<button class="btn-save" onclick="saveOutcome()">SAVE OUTCOME TO REGISTRY</button></div>';
+}
+
+function saveCaseToStorage(recommendation){
+  const id='pediabx_case_'+Date.now();state.currentCaseId=id;
+  const caseData={id,timestamp:new Date().toISOString(),therapyMode:state.therapyMode,
+    infection:document.getElementById('infection').value,
+    ageMo:document.getElementById('ageMo').value,weight:document.getElementById('weight').value,
+    severity:state.severity,icu:state.flags.icu_current,clabsi:state.clabsi,
+    recommendation,outcome:null};
+  localStorage.setItem(id,JSON.stringify(caseData));
+}
+function saveOutcome(){
+  if(!state.currentCaseId)return;
+  const ov=document.getElementById('oc_out').value;
+  if(!ov){alert('Please select a clinical outcome.');return;}
+  const existing=localStorage.getItem(state.currentCaseId);if(!existing)return;
+  const cd=JSON.parse(existing);
+  cd.outcome={abx_used:document.getElementById('oc_abx').value,duration:document.getElementById('oc_dur').value,
+    outcome:ov,outcome_days:document.getElementById('oc_days').value,
+    complications:document.getElementById('oc_comp').value,notes:document.getElementById('oc_notes').value,
+    saved_at:new Date().toISOString()};
+  localStorage.setItem(state.currentCaseId,JSON.stringify(cd));
+  document.querySelector('.outcome-section').innerHTML='<div class="saved-ok">Outcome saved. Thank you!</div>';
+  trackEvent('outcome_saved',{outcome:ov});
+}
+
+function loadRegistry(){
+  const cases=[];
+  for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);
+    if(key&&key.startsWith('pediabx_case_')){try{cases.push(JSON.parse(localStorage.getItem(key)));}catch(e){}}}
+  cases.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
+  const c=document.getElementById('registryList');if(!c)return;
+  if(!cases.length){c.innerHTML='<div class="empty">No cases yet.</div>';return;}
+  c.innerHTML=cases.map(cas=>{
+    const rec=cas.recommendation||{};
+    const prima=rec.first_choice||rec.prima_scelta||{};
+    const drug=prima.drug||prima.farmaco||'';
+    const oc=cas.outcome;
+    return '<div class="reg-card '+(oc?'with-outcome':'')+'">'+
+      '<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px;">'+
+      '<div><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;">'+
+      '<span class="badge '+(cas.therapyMode==='mirata'?'mirata':'empirica')+'" style="font-size:10px;padding:2px 8px;">'+(cas.therapyMode==='mirata'?'TARGETED':'EMPIRICAL')+'</span>'+
+      '<span style="font-family:var(--sans);font-size:13px;color:var(--blue);font-weight:700;">'+(cas.infection||'')+'</span></div>'+
+      '<div style="font-size:11px;color:var(--muted);">'+cas.ageMo+' mo · '+cas.weight+' kg · '+cas.severity+(cas.icu?' · ICU':'')+'</div>'+
+      '<div style="font-size:10px;color:var(--dim);">'+new Date(cas.timestamp).toLocaleString()+'</div></div>'+
+      '<span class="badge '+(oc?'indicated':'')+'" style="font-size:10px;padding:2px 10px;'+(oc?'':'border-color:var(--border);color:var(--muted);background:transparent;')+'">'+(oc?'Outcome documented':'Pending')+'</span></div>'+
+      (drug?'<div style="font-size:11px;color:var(--muted);">1st choice: <strong style="color:var(--green);">'+drug+'</strong>'+(prima.dose?' · '+prima.dose:'')+(prima.duration?' · '+prima.duration:prima.durata?' · '+prima.durata:'')+'</div>':'')+
+      (oc?'<div style="margin-top:8px;background:var(--bg);border-radius:8px;padding:8px 12px;border:1px solid rgba(16,185,129,0.2);font-size:11px;">'+
+        '<strong style="color:#86efac;">'+escHtml(oc.outcome)+'</strong>'+
+        (oc.abx_used?'<span style="color:var(--muted);margin-left:10px;">'+escHtml(oc.abx_used)+'</span>':'')+
+        (oc.duration?'<span style="color:var(--muted);margin-left:8px;">'+oc.duration+' days</span>':'')+
+        (oc.notes?'<div style="color:var(--dim);font-style:italic;margin-top:4px;">"'+escHtml(oc.notes)+'"</div>':'')+
+        '</div>':'')+
+      '</div>';
+  }).join('');
+}
+
+async function generateInsights(){
+  const cases=[];
+  for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);
+    if(key&&key.startsWith('pediabx_case_')){try{const c=JSON.parse(localStorage.getItem(key));if(c.outcome)cases.push(c);}catch(e){}}}
+  if(!cases.length){document.getElementById('insightsContent').innerHTML='<div class="empty">No cases with documented outcomes yet.</div>';return;}
+  const btn=document.getElementById('insightsBtn');btn.disabled=true;btn.textContent='Analysing...';
+  const summary=cases.map(c=>({
+    infection:c.infection,age_months:c.ageMo,severity:c.severity,mode:c.therapyMode,
+    recommended:(c.recommendation&&(c.recommendation.first_choice||c.recommendation.prima_scelta))?(c.recommendation.first_choice||c.recommendation.prima_scelta).drug||(c.recommendation.first_choice||c.recommendation.prima_scelta).farmaco:'',
+    used:c.outcome.abx_used,duration:c.outcome.duration,outcome:c.outcome.outcome,notes:c.outcome.notes
+  }));
+  const promptText='Analyse '+cases.length+' real-world paediatric cases and generate clinical insights. Data: '+JSON.stringify(summary)+' Reply ONLY with JSON: total_cases_analysed, first_choice_success_rate, success_patterns(array), failure_patterns(array), empirical_vs_targeted_discordances(array), guideline_vs_actual_duration, stewardship_insights(array), atypical_cases(array), conclusions';
+  try{
+    const resp=await fetch('https://pediabx-backend.thekookbitcoiner.workers.dev',{method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({system:'Reply ONLY with valid JSON.',messages:[{role:'user',content:promptText}],max_tokens:2000})});
+    const txt=await resp.text();const d=JSON.parse(txt);
+    const raw=(d.content||[]).find(b=>b.type==='text');if(!raw)return;
+    const t=raw.text.replace(/```json/g,'').replace(/```/g,'').trim();
+    const i0=t.indexOf('{'),i1=t.lastIndexOf('}');if(i0===-1)return;
+    renderInsights(JSON.parse(t.substring(i0,i1+1)));
+  }catch(e){document.getElementById('insightsContent').innerHTML='<div class="alert-box err">Error: '+e.message+'</div>';}
+  btn.disabled=false;btn.textContent='Generate / Refresh';
+}
+
+function renderInsights(ins){
+  let html='<div class="stat-grid">';
+  html+='<div class="stat-card" style="border:1px solid rgba(14,165,233,0.3);"><div class="stat-val" style="color:var(--blue);">'+(ins.total_cases_analysed||'—')+'</div><div class="stat-lbl">Cases analysed</div></div>';
+  html+='<div class="stat-card" style="border:1px solid rgba(16,185,129,0.3);"><div class="stat-val" style="color:var(--green);">'+(ins.first_choice_success_rate||'—')+'</div><div class="stat-lbl">1st choice success</div></div>';
+  html+='<div class="stat-card" style="border:1px solid rgba(139,92,246,0.3);"><div class="stat-val small" style="color:#a78bfa;">'+(ins.atypical_cases&&ins.atypical_cases.length?ins.atypical_cases.length:'—')+'</div><div class="stat-lbl">Atypical cases</div></div>';
+  html+='</div>';
+  [{key:'success_patterns',icon:'SUCCESS PATTERNS',color:'var(--green)',tc:'#86efac'},
+   {key:'failure_patterns',icon:'FAILURE PATTERNS',color:'var(--red)',tc:'#fca5a5'},
+   {key:'empirical_vs_targeted_discordances',icon:'EMPIRICAL vs TARGETED',color:'var(--amber)',tc:'#fcd34d'},
+   {key:'stewardship_insights',icon:'STEWARDSHIP INSIGHTS',color:'var(--green)',tc:'#86efac'},
+   {key:'atypical_cases',icon:'ATYPICAL CASES',color:'#8b5cf6',tc:'#c4b5fd'}
+  ].forEach(b=>{
+    if(ins[b.key]&&ins[b.key].length)html+=resBlock(b.color,b.icon,'<ul class="res-list">'+ins[b.key].map(item=>'<li style="color:'+b.tc+';">'+escHtml(item)+'</li>').join('')+'</ul>');
+  });
+  if(ins.guideline_vs_actual_duration)html+=resBlock('var(--blue)','GUIDELINE vs ACTUAL DURATION','<span style="color:var(--muted);">'+escHtml(ins.guideline_vs_actual_duration)+'</span>');
+  if(ins.conclusions)html+='<div class="res-block" style="background:linear-gradient(135deg,rgba(5,46,22,0.4),rgba(12,21,32,0.8));border-left-color:var(--green);"><div class="res-block-title" style="color:var(--green);">CLINICAL CONCLUSIONS</div><div class="res-block-text" style="color:#86efac;font-size:13px;">'+escHtml(ins.conclusions)+'</div></div>';
+  document.getElementById('insightsContent').innerHTML=html;
+}
+
+function exportCSV(){
+  const cases=[];
+  for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(key&&key.startsWith('pediabx_case_')){try{cases.push(JSON.parse(localStorage.getItem(key)));}catch(e){}}}
+  if(!cases.length){alert('No cases in registry.');return;}
+  const headers=['Date','Infection','Age (months)','Weight (kg)','Severity','Mode','ICU','CLABSI','1st choice drug','Dose','Duration','AWaRe','Outcome - drug used','Outcome - duration (days)','Outcome - result','Outcome - days to recovery','Outcome - complications','Outcome - notes'];
+  const rows=cases.map(c=>{
+    const rec=c.recommendation||{};const fc=rec.first_choice||rec.prima_scelta||{};const oc=c.outcome||{};
+    return [new Date(c.timestamp).toLocaleDateString(),c.infection||'',c.ageMo||'',c.weight||'',c.severity||'',c.therapyMode||'',c.icu?'yes':'no',c.clabsi?'yes':'no',fc.drug||fc.farmaco||'',fc.dose||'',fc.duration||fc.durata||'',rec.AWaRe_category||'',oc.abx_used||'',oc.duration||'',oc.outcome||'',oc.outcome_days||'',oc.complications||'',oc.notes||''].map(v=>'"'+String(v).replace(/"/g,'""')+'"');
+  });
+  const csv=[headers.map(h=>'"'+h+'"').join(','),...rows.map(r=>r.join(','))].join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='pediabx_cases_'+new Date().toISOString().slice(0,10)+'.csv';a.click();URL.revokeObjectURL(url);
+}
+
+function submitFeedback(){
+  const text=document.getElementById('fb_text').value.trim();
+  if(!text){alert('Please write your feedback.');return;}
+  const fb={timestamp:new Date().toISOString(),role:document.getElementById('fb_role').value,country:document.getElementById('fb_country').value,type:document.getElementById('fb_type').value,text,email:document.getElementById('fb_email').value};
+  const existing=JSON.parse(localStorage.getItem('pediabx_feedback')||'[]');
+  existing.push(fb);localStorage.setItem('pediabx_feedback',JSON.stringify(existing));
+  trackEvent('feedback_submitted',{role:fb.role,type:fb.type,country:fb.country});
+  document.getElementById('feedbackForm').style.display='none';
+  document.getElementById('feedbackSent').style.display='block';
+}
+
+function resetForm(){
+  // Reset all form fields
+  document.getElementById('ageMo').value='';
+  document.getElementById('weight').value='';
+  document.getElementById('feverDays').value='';
+  document.getElementById('infection').value='';
+  document.getElementById('allergy').value='None';
+  document.getElementById('notes').value='';
+  document.getElementById('ageYears').textContent='';
+  // Reset state
+  state.severity='mild';
+  state.comorbidities=[];
+  state.flags={prior_abx:false,hospitalized:false,icu_current:false,icu_recent:false};
+  state.catheters=[];state.clabsi=false;
+  state.burns=[];state.burnInfected=false;
+  state.microEntries=[];state.currentCaseId=null;
+  // Reset UI chips
+  document.querySelectorAll('.chip').forEach(b=>b.className='chip');
+  // Reset severity buttons
+  document.querySelectorAll('.sev-btn').forEach(b=>b.classList.toggle('active',b.dataset.sev==='mild'));
+  // Reset therapy mode
+  setMode('empirica');
+  // Reset flag cards
+  ['prior_abx','hospitalized','icu_current','icu_recent'].forEach(k=>{
+    document.getElementById('flag_'+k).classList.remove('on');
+    document.getElementById('chk_'+k).textContent='';
+  });
+  ['clabsi','burnInf'].forEach(id=>{
+    const fc=document.getElementById('flagcard_'+id);
+    if(fc){fc.classList.remove('on');}
+    const chk=document.getElementById('chk_'+id);
+    if(chk)chk.textContent='';
+  });
+  // Hide catheters/burns special flags
+  document.getElementById('clabsiFlag').style.display='none';
+  document.getElementById('burnInfFlag').style.display='none';
+  // Clear micro entries
+  document.getElementById('microEntries').innerHTML='';
+  // Hide result and errors
+  document.getElementById('resultSection').style.display='none';
+  hideError();hideDebug();
+  // Scroll to top of form
+  document.getElementById('tab-form').scrollIntoView({behavior:'smooth',block:'start'});
+  trackEvent('new_patient_started',{});
+}
+
+function showError(msg){const b=document.getElementById('errorBox');b.textContent=msg;b.style.display='block';}
+function hideError(){document.getElementById('errorBox').style.display='none';}
+function showDebug(msg){document.getElementById('debugText').textContent=msg;document.getElementById('debugBox').style.display='block';}
+function hideDebug(){document.getElementById('debugBox').style.display='none';}
+
+window.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
