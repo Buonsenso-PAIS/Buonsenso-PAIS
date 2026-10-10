@@ -702,7 +702,7 @@ async function handleSubmit(){
     const resp=await fetch('https://pediabx-backend.thekookbitcoiner.workers.dev',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({system:'Reply ONLY with valid JSON. No text before or after. No markdown.',messages:[{role:'user',content:buildPrompt()}],max_tokens:4096}),
+      body:JSON.stringify({system:'Reply ONLY with valid JSON. No text before or after. No markdown.',messages:[{role:'user',content:buildPrompt()}],max_tokens:8192}),
     });
     const respText=await resp.text();
     showDebug('HTTP '+resp.status+' | len:'+respText.length+' | '+respText.substring(0,80));
@@ -908,7 +908,7 @@ async function generateInsights(){
   try{
     const resp=await fetch('https://pediabx-backend.thekookbitcoiner.workers.dev',{method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({system:'Reply ONLY with valid JSON.',messages:[{role:'user',content:promptText}],max_tokens:2000})});
+      body:JSON.stringify({system:'Reply ONLY with valid JSON.',messages:[{role:'user',content:promptText}],max_tokens:4000})});
     const txt=await resp.text();const d=JSON.parse(txt);
     const raw=(d.content||[]).find(b=>b.type==='text');if(!raw)return;
     const t=raw.text.replace(/```json/g,'').replace(/```/g,'').trim();
