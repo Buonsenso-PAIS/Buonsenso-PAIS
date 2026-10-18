@@ -908,7 +908,7 @@ async function generateInsights(){
   try{
     const resp=await fetch('https://pediabx-backend.thekookbitcoiner.workers.dev',{method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({system:'Reply ONLY with valid JSON.',messages:[{role:'user',content:promptText}],max_tokens:4000})});
+      body:JSON.stringify({system:'Reply ONLY with valid JSON.',messages:[{role:'user',content:promptText}],max_tokens:16000})});
     const txt=await resp.text();const d=JSON.parse(txt);
     const raw=(d.content||[]).find(b=>b.type==='text');if(!raw)return;
     const t=raw.text.replace(/```json/g,'').replace(/```/g,'').trim();
